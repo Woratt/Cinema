@@ -29,6 +29,7 @@ private:
     QVector<int> m_numOfPlaces;
     QVector<QPushButton*> m_placesButtons;
     QVector<QPushButton*> m_sessionButtons;
+    QVector<QPushButton*> m_registButtons;
 
     // set connections
     void setUpConnections();
@@ -40,6 +41,9 @@ private slots:
     void backWindow();
     void selectSession(int);
     void selectPlaces(int);
+    void logIn();
+    void regIn();
+    void regDone();
 
 };
 
