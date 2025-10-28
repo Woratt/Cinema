@@ -5,6 +5,8 @@
 #include <QStackedWidget>
 #include <QPushButton>
 
+#include "apimanager.h"
+
 QT_BEGIN_NAMESPACE
 namespace Ui {
 class MainWindow;
@@ -21,13 +23,24 @@ public:
 
 private:
     Ui::MainWindow *ui;
-    int rez;
+    int m_rez = 0;
+    int m_session = 0;
+    int m_movies;
+    QVector<int> m_numOfPlaces;
+    QVector<QPushButton*> m_placesButtons;
+    QVector<QPushButton*> m_sessionButtons;
+
+    // set connections
+    void setUpConnections();
 
 private slots:
     void colourSeat();
-    void on_pushButton_8_clicked();
+    void onCalculateRemainder();
     void newWindow();
     void backWindow();
+    void selectSession(int);
+    void selectPlaces(int);
+
 };
 
 #endif // MAINWINDOW_H
