@@ -20,6 +20,7 @@ MainWindow::MainWindow(QWidget *parent)
                         ui->pushButton_27, ui->pushButton_28,
                         };
 
+    m_apiManager = new ApiManager();
     setUpConnections();
 }
 
@@ -41,11 +42,19 @@ void MainWindow::setUpConnections(){
         ++numOfPlace;
     }
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
-    connect(ui->pushButton_2, SIGNAL(clicked()), this ,SLOT(backWindow()));
-    connect(ui->pushButton_29, SIGNAL(clicked()), this ,SLOT(logIn()));
-    connect(ui->pushButton_30, SIGNAL(clicked()), this ,SLOT(regIn()));
-    connect(ui->pushButton_31, SIGNAL(clicked()), this ,SLOT(regDone()));
 
+    connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
+    connect(ui->pushButton_29, &QPushButton::clicked, this, &MainWindow::logIn);
+    connect(ui->pushButton_30, &QPushButton::clicked, this, &MainWindow::goToPageRegIn);
+    connect(ui->pushButton_31, &QPushButton::clicked, this, &MainWindow::regIn);
+
+
+    connect(m_apiManager, &ApiManager::loginSuccess, this, &MainWindow::regDone);
+    connect(m_apiManager, &ApiManager::loginError, this, &MainWindow::errorLogIn);
+    connect(m_apiManager, &ApiManager::registrationSuccess, this, &MainWindow::regDone);
+    connect(m_apiManager, &ApiManager::registrationError, this, &MainWindow::errorRegIn);
+
+    connect(m_apiManager, &ApiManager::loginError, this, &MainWindow::errorLogIn);
 }
 
 
@@ -106,11 +115,34 @@ void MainWindow::selectPlaces(int numOfPlace){
     m_numOfPlaces.push_back(numOfPlace);
 }
 void MainWindow::logIn(){
-    ui->stackedWidget->setCurrentIndex(2);
+
+    m_apiManager->loginUser(ui->lineEdit_2->text(), ui->lineEdit_3->text());
+
 }
-void MainWindow::regIn(){
+void MainWindow::goToPageRegIn(){
     ui->stackedWidget->setCurrentIndex(1);
 }
+
+void MainWindow::regIn(){
+    m_apiManager->registerUser(ui->lineEdit_4->text(), ui->lineEdit_5->text(), ui->lineEdit_6->text());
+}
+
 void MainWindow::regDone(){
-    ui->stackedWidget->setCurrentIndex(0);
+    ui->stackedWidget->setCurrentIndex(2);
+
+    //m_user = new User();
+
+    ui->lineEdit_2->clear();
+    ui->lineEdit_3->clear();
+    ui->lineEdit_4->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_6->clear();
+}
+
+void MainWindow::errorLogIn(const QString& message){
+    QMessageBox::information(this, "Login Error", message);
+}
+
+void MainWindow::errorRegIn(const QString& message){
+    QMessageBox::information(this, "Registration Error", message);
 }

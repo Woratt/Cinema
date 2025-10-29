@@ -4,8 +4,10 @@
 #include <QMainWindow>
 #include <QStackedWidget>
 #include <QPushButton>
+#include <QMessageBox>
 
 #include "apimanager.h"
+#include "user.h"
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -34,6 +36,12 @@ private:
     // set connections
     void setUpConnections();
 
+    //Api
+    ApiManager *m_apiManager;
+
+    //User
+    User *m_user;
+
 private slots:
     void colourSeat();
     void onCalculateRemainder();
@@ -42,8 +50,12 @@ private slots:
     void selectSession(int);
     void selectPlaces(int);
     void logIn();
+    void goToPageRegIn();
     void regIn();
     void regDone();
+
+    void errorLogIn(const QString&);
+    void errorRegIn(const QString&);
 
 };
 
