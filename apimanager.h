@@ -16,7 +16,9 @@ public:
     void registerUser(const QString&, const QString&, const QString&);
     void loginUser(const QString&, const QString&);
     void addHall(const QString&, int);
-    void reservePlace(int);
+    void reservePlace(int, int);
+    void addMovie(const QString&, int, const QString&);
+    void addSession(int, int, int);
 
 signals:
     void registrationSuccess(const QString&);

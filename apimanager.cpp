@@ -41,8 +41,20 @@ void ApiManager::loginUser(const QString& login, const QString& password)
     manager->post(request, data);
 }
 
-void ApiManager::reservePlace(int numOfPlace){
+void ApiManager::reservePlace(int numOfSession, int numOfPlace){
+    QJsonObject json;
+    json["session_id"] = numOfSession;
+    json["seat_number"] = numOfPlace;
 
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/reservePlace"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
+
+    manager->post(request, data);
 }
 
 void ApiManager::addHall(const QString& name, int seat_count)
@@ -61,6 +73,42 @@ void ApiManager::addHall(const QString& name, int seat_count)
 
     manager->post(request, data);
 }
+
+void ApiManager::addMovie(const QString& title, int duration, const QString& genre){
+    QJsonObject json;
+    json["title"] = title;
+    json["duration"] = duration;
+    json["genre"] = genre;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/addMovie"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    manager->post(request, data);
+}
+
+void ApiManager::addSession(int movie_id, int hall_id, int start_time){
+    QJsonObject json;
+    json["movie_id"] = movie_id;
+    json["hall_id"] = hall_id;
+    json["start_time"] = start_time;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/addSession"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    manager->post(request, data);
+}
+
+
 
 void ApiManager::onReplyFinished(QNetworkReply* reply)
 {

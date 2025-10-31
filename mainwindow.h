@@ -53,6 +53,7 @@ private slots:
     void goToPageRegIn();
     void regIn();
     void regDone();
+    void reservePlaces();
 
     void errorLogIn(const QString&);
     void errorRegIn(const QString&);

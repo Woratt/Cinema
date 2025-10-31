@@ -41,6 +41,8 @@ void MainWindow::setUpConnections(){
         connect(placeBt, &QPushButton::clicked, this, &MainWindow::colourSeat);
         ++numOfPlace;
     }
+
+    connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::reservePlaces);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
@@ -75,7 +77,6 @@ void MainWindow::backWindow(){
     ui->label_2->setText("Здача :");
     ui->lineEdit->clear();
     ui->stackedWidget->setCurrentIndex(2);
-
 }
 
 void MainWindow::colourSeat(){
@@ -130,13 +131,19 @@ void MainWindow::regIn(){
 void MainWindow::regDone(){
     ui->stackedWidget->setCurrentIndex(2);
 
-    //m_user = new User();
-
     ui->lineEdit_2->clear();
     ui->lineEdit_3->clear();
     ui->lineEdit_4->clear();
     ui->lineEdit_5->clear();
     ui->lineEdit_6->clear();
+}
+
+void MainWindow::reservePlaces(){
+    for(int numOfPlace : m_numOfPlaces){
+        qDebug() << m_session << " " << numOfPlace << "/n";
+        m_apiManager->reservePlace(m_session, numOfPlace);
+    }
+    m_numOfPlaces.clear();
 }
 
 void MainWindow::errorLogIn(const QString& message){
