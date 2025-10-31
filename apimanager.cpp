@@ -57,6 +57,22 @@ void ApiManager::reservePlace(int numOfSession, int numOfPlace){
     manager->post(request, data);
 }
 
+void ApiManager::unreservePlace(int numOfSession, int numOfPlace){
+    QJsonObject json;
+    json["session_id"] = numOfSession;
+    json["seat_number"] = numOfPlace;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/unreservePlace"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
+
+    manager->post(request, data);
+}
+
 void ApiManager::addHall(const QString& name, int seat_count)
 {
     QJsonObject json;

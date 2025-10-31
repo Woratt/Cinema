@@ -20,6 +20,7 @@ public:
     void loginUser(const QString&, const QString&);
     void addHall(const QString&, int);
     void reservePlace(int, int);
+    void unreservePlace(int, int);
     void addMovie(const QString&, int, const QString&);
     void addSession(int, int, int);
     QVector<int> getReservePlaces(int);
