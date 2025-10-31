@@ -108,13 +108,40 @@ void ApiManager::addSession(int movie_id, int hall_id, int start_time){
     manager->post(request, data);
 }
 
+QVector<int> ApiManager::getReservePlaces(int session_id){
+    m_reservedPlaces.clear();
+    QUrl url(baseURL + "/getReservePlaces");
+    QUrlQuery query;
+    query.addQueryItem("session_id", QString::number(session_id));
+    url.setQuery(query);
 
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    return m_reservedPlaces;
+}
+
+void ApiManager::onReadyRead(){
+    QByteArray data = m_reply->readAll();
+    QJsonDocument doc = QJsonDocument::fromJson(data);
+    QJsonArray seatsArray = doc.array();
+    for (int i = 0; i < seatsArray.size(); ++i) {
+        m_reservedPlaces.push_back(seatsArray[i].toInt());
+    }
+}
 
 void ApiManager::onReplyFinished(QNetworkReply* reply)
 {
     if(reply->error() == QNetworkReply::NoError){
         QByteArray response = reply->readAll();
-        QJsonDocument doc =QJsonDocument::fromJson(response);
+        QJsonDocument doc = QJsonDocument::fromJson(response);
         QJsonObject json = doc.object();
 
         QString url = reply->url().toString();

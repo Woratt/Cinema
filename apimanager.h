@@ -7,6 +7,9 @@
 #include <QNetworkReply>
 #include <QJsonDocument>
 #include <QJsonObject>
+#include <QJsonArray>
+#include <QUrlQuery>
+#include <QEventLoop>
 
 class ApiManager : public QWidget
 {
@@ -19,6 +22,7 @@ public:
     void reservePlace(int, int);
     void addMovie(const QString&, int, const QString&);
     void addSession(int, int, int);
+    QVector<int> getReservePlaces(int);
 
 signals:
     void registrationSuccess(const QString&);
@@ -32,12 +36,18 @@ signals:
 
 private slots:
     void onReplyFinished(QNetworkReply*);
+    void onReadyRead();
 
 private:
+    //QVector<int> getArrfromJson();
+    QVector<int> m_reservedPlaces;
+
     QNetworkAccessManager* manager;
     QString baseURL = "https://andriipanchuk.pythonanywhere.com";
     QString publicApiKey = "cinema_public_key_2024";
     QString adminApiKey = "key_my_pc";
+
+    QNetworkReply *m_reply;
 
 };
 

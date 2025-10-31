@@ -32,6 +32,7 @@ void MainWindow::setUpConnections(){
             selectSession(numOfSession);
         });
         connect(sessionBt, &QPushButton::clicked, this, &MainWindow::newWindow);
+        connect(sessionBt, &QPushButton::clicked, this, &MainWindow::markReservePlaces);
         ++numOfSession;
     }
     for(auto placeBt : m_placesButtons){
@@ -42,7 +43,8 @@ void MainWindow::setUpConnections(){
         ++numOfPlace;
     }
 
-    connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::reservePlaces);
+    //connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::reservePlaces);
+    connect(this, &MainWindow::reservedPlaces, this, &MainWindow::onReservePlaces);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
@@ -86,7 +88,6 @@ void MainWindow::colourSeat(){
     if(clickedButton->isChecked()){
         clickedButton->setStyleSheet("background-color: yellow;color: black;font-weight: bold;border: none;border-radius: 8px;");
         m_rez += sumaBillet;
-
     }
     else {
         clickedButton->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
@@ -94,7 +95,6 @@ void MainWindow::colourSeat(){
 
     }
     ui->suma->setText("Сума квитка: " + QString::number(m_rez) + " грн");
-
 }
 
 void MainWindow::onCalculateRemainder(){
@@ -102,10 +102,12 @@ void MainWindow::onCalculateRemainder(){
     int change = cash - m_rez;
     if(change >= 0){
         ui->label_2->setText("Здача: " + QString::number(change) + " грн");
+        emit reservedPlaces();
     }
     else{
         ui->label_2->setText("Упсс...Бракує коштів або ви ввели щось інше");
     }
+
 }
 
 void MainWindow::selectSession(int numOfSession){
@@ -138,12 +140,26 @@ void MainWindow::regDone(){
     ui->lineEdit_6->clear();
 }
 
-void MainWindow::reservePlaces(){
+void MainWindow::onReservePlaces(){
     for(int numOfPlace : m_numOfPlaces){
         qDebug() << m_session << " " << numOfPlace << "/n";
         m_apiManager->reservePlace(m_session, numOfPlace);
     }
     m_numOfPlaces.clear();
+}
+
+void MainWindow::markReservePlaces(){
+    QVector<int> reservePlaces = m_apiManager->getReservePlaces(m_session);
+    qDebug() << reservePlaces.size() << "\n";
+    for(int i  = 0; i < reservePlaces.size(); ++i){
+        qDebug() << reservePlaces[i] << "\n";
+        if(reservePlaces[i] == 1){
+            m_placesButtons[i]->setEnabled(false);
+            m_placesButtons[i]->setStyleSheet("background-color: grey;color: black;font-weight: bold;border: none;border-radius: 8px;");
+        }else{
+            m_placesButtons[i]->setEnabled(true);
+        }
+    }
 }
 
 void MainWindow::errorLogIn(const QString& message){
