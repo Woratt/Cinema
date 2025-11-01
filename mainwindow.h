@@ -43,6 +43,7 @@ private:
     User *m_user;
 signals:
     void reservedPlaces();
+    void unreservedPlaces();
 
 private slots:
     void colourSeat();
@@ -56,8 +57,10 @@ private slots:
     void regIn();
     void regDone();
     void onReservePlaces();
+    void onUnReservePlaces();
 
     void markReservePlaces();
+    //void markUnReservePlaces();
 
     void errorLogIn(const QString&);
     void errorRegIn(const QString&);

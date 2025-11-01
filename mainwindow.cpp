@@ -31,8 +31,9 @@ void MainWindow::setUpConnections(){
         connect(sessionBt, &QPushButton::clicked, this, [=](){
             selectSession(numOfSession);
         });
-        connect(sessionBt, &QPushButton::clicked, this, &MainWindow::newWindow);
         connect(sessionBt, &QPushButton::clicked, this, &MainWindow::markReservePlaces);
+        connect(sessionBt, &QPushButton::clicked, this, &MainWindow::newWindow);
+
         ++numOfSession;
     }
     for(auto placeBt : m_placesButtons){
@@ -43,9 +44,11 @@ void MainWindow::setUpConnections(){
         ++numOfPlace;
     }
 
-    //connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::reservePlaces);
     connect(this, &MainWindow::reservedPlaces, this, &MainWindow::onReservePlaces);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
+    connect(ui->pushButton_32, &QPushButton::clicked, this, &MainWindow::onUnReservePlaces);
+
+
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
     connect(ui->pushButton_29, &QPushButton::clicked, this, &MainWindow::logIn);
@@ -74,13 +77,13 @@ void MainWindow::backWindow(){
         button->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
         button->setChecked(false);
     }
+
     m_rez = 0;
     ui->suma->setText("Сума квитка: 0 грн");
     ui->label_2->setText("Здача :");
     ui->lineEdit->clear();
     ui->stackedWidget->setCurrentIndex(2);
 }
-
 void MainWindow::colourSeat(){
     QPushButton *clickedButton = qobject_cast<QPushButton*>(sender());
     int sumaBillet = 200;
@@ -144,9 +147,15 @@ void MainWindow::onReservePlaces(){
     for(int numOfPlace : m_numOfPlaces){
         qDebug() << m_session << " " << numOfPlace << "/n";
         m_apiManager->reservePlace(m_session, numOfPlace);
+        if (numOfPlace > 0 && numOfPlace <= m_placesButtons.size()) {
+            QPushButton *buttonToReserve = m_placesButtons[numOfPlace - 1];
+            buttonToReserve->setStyleSheet("background-color: grey;color: black;font-weight: bold;border: none;border-radius: 8px;");
+            buttonToReserve->setEnabled(false);
+        }
     }
     m_numOfPlaces.clear();
 }
+
 
 void MainWindow::markReservePlaces(){
     QVector<int> reservePlaces = m_apiManager->getReservePlaces(m_session);
@@ -155,9 +164,22 @@ void MainWindow::markReservePlaces(){
         qDebug() << reservePlaces[i] << "\n";
         if(reservePlaces[i] == 1){
             m_placesButtons[i]->setEnabled(false);
-            m_placesButtons[i]->setStyleSheet("background-color: grey;color: black;font-weight: bold;border: none;border-radius: 8px;");
+            m_placesButtons[i]->setStyleSheet("background-color: grey; color: black;font-weight: bold;border: none;border-radius: 8px;");
         }else{
             m_placesButtons[i]->setEnabled(true);
+        }
+    }
+}
+void MainWindow::onUnReservePlaces(){
+    qDebug();
+    for (int i = 0; i < m_placesButtons.size(); ++i) {
+        QPushButton *button = m_placesButtons[i];
+        if (!button->isEnabled()) {
+            int numOfPlace = i + 1;
+            qDebug() << m_session << numOfPlace;
+            m_apiManager->unreservePlace(m_session, numOfPlace);
+            button->setChecked(true);
+            m_placesButtons[i]->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
         }
     }
 }

@@ -25,6 +25,7 @@ public:
     void addSession(int, int, int);
     QVector<int> getReservePlaces(int);
 
+
 signals:
     void registrationSuccess(const QString&);
     void registrationError(const QString&);
