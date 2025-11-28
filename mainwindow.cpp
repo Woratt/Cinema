@@ -7,9 +7,9 @@ MainWindow::MainWindow(QWidget *parent)
 {
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
-    m_sessionButtons = {ui->pushButton, ui->pushButton_3, ui->pushButton_4,
-                       ui->pushButton_5, ui->pushButton_6, ui->pushButton_7
-    };
+    //m_sessionButtons = {ui->pushButton, ui->pushButton_3, ui->pushButton_4,
+    //                   ui->pushButton_5, ui->pushButton_6, ui->pushButton_7
+    //};
 
     m_placesButtons = {ui->pushButton_9, ui->pushButton_10, ui->pushButton_11,
                         ui->pushButton_12, ui->pushButton_13, ui->pushButton_14,
@@ -21,7 +21,89 @@ MainWindow::MainWindow(QWidget *parent)
                         };
 
     m_apiManager = new ApiManager();
+    m_loadPoster = new LoadPoster(this);
+    ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
+    ui->tableWidget->setColumnCount(7);
+    ui->tableWidget->setRowCount(10);
+    setupTable();
+
     setUpConnections();
+}
+
+void MainWindow::setupTable() {
+    // Заборонити розтягування таблиці
+    //ui->tableWidget->setSizePolicy(QSizePolicy::, QSizePolicy::Fixed);
+    ui->tableWidget->setMinimumSize(1050, 250);
+
+    // Приховати заголовки
+    ui->tableWidget->verticalHeader()->setVisible(false);
+    ui->tableWidget->horizontalHeader()->setVisible(false);
+
+    // Відключити сітку
+    ui->tableWidget->setShowGrid(false);
+
+    // Відключити прокрутку
+    ui->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+   //->tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+}
+
+void MainWindow::resizeEvent(QResizeEvent *event) {
+    QMainWindow::resizeEvent(event);
+    adjustTableSize();
+}
+
+void MainWindow::adjustTableSize() {
+    if (!ui->tableWidget->rowCount() || !ui->tableWidget->columnCount()) return;
+
+    int tableWidth = ui->tableWidget->width();
+    int tableHeight = ui->tableWidget->height();
+
+    int columnWidth = tableWidth / ui->tableWidget->columnCount();
+    int rowHeight = tableHeight / ui->tableWidget->rowCount();
+
+    // Встановлюємо розміри стовпців і рядків
+    for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
+        ui->tableWidget->setColumnWidth(col, 150);
+    }
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        ui->tableWidget->setRowHeight(row, 250);
+    }
+
+    // Оновлюємо розміри всіх віджетів
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
+            QWidget *widget = ui->tableWidget->cellWidget(row, col);
+            if (widget) {
+                widget->setFixedSize(150, 250);
+            }
+        }
+    }
+}
+
+void MainWindow::setMovies(){
+    parseMoviesArr(m_apiManager->getAllMovies());
+    int row = 0;
+    int col = 0;
+    for(int i = 0; i < m_moviesList.size(); ++i){
+        MovieWidget *movieWidget = new MovieWidget(this);
+        LoadPoster *loadPoster = new LoadPoster(this);
+        loadPoster->loadImage(m_moviesList[i].posterUrl);
+        connect(loadPoster, &LoadPoster::imageLoaded, this, [=](const QPixmap& map){
+            movieWidget->setMovieData(m_moviesList[i].id, m_moviesList[i].title, map);
+            ui->tableWidget->setCellWidget(row, col, movieWidget);
+            qDebug() << row << " " << col;
+        });
+
+        if((i + 1) % 7 == 0){
+            ++row;
+            col = 0;
+        }else{
+            ++col;
+        }
+    }
+    for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
+        ui->tableWidget->setRowHeight(row, 250); // Мінімальна висота для кожного рядка 50 пікселів
+    }
 }
 
 void MainWindow::setUpConnections(){
@@ -67,6 +149,7 @@ void MainWindow::setUpConnections(){
 
 MainWindow::~MainWindow()
 {
+    delete m_apiManager;
     delete ui;
 }
 void MainWindow::newWindow(){
@@ -77,7 +160,7 @@ void MainWindow::backWindow(){
         button->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
         button->setChecked(false);
     }
-
+    m_numOfPlaces.clear();
     m_rez = 0;
     ui->suma->setText("Сума квитка: 0 грн");
     ui->label_2->setText("Здача :");
@@ -141,6 +224,7 @@ void MainWindow::regDone(){
     ui->lineEdit_4->clear();
     ui->lineEdit_5->clear();
     ui->lineEdit_6->clear();
+    setMovies();
 }
 
 void MainWindow::onReservePlaces(){
@@ -181,6 +265,20 @@ void MainWindow::onUnReservePlaces(){
             button->setChecked(true);
             m_placesButtons[i]->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
         }
+    }
+}
+
+void MainWindow::parseMoviesArr(const QJsonArray& moviesArr){
+    for (int i = 0; i < moviesArr.size(); ++i) {
+        QJsonObject movieObj = moviesArr[i].toObject();
+
+        Movie movie;
+        movie.id = movieObj["id"].toInt();
+        movie.title = movieObj["title"].toString();
+        movie.genre = movieObj["genre"].toString();
+        movie.posterUrl = movieObj["linkPoster"].toString();
+
+        m_moviesList.append(movie);
     }
 }
 

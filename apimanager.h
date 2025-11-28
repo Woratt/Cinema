@@ -10,6 +10,9 @@
 #include <QJsonArray>
 #include <QUrlQuery>
 #include <QEventLoop>
+#include <QFile>
+#include <QHttpMultiPart>
+#include <QFileInfo>
 
 class ApiManager : public QWidget
 {
@@ -21,10 +24,15 @@ public:
     void addHall(const QString&, int);
     void reservePlace(int, int);
     void unreservePlace(int, int);
-    void addMovie(const QString&, int, const QString&);
+    void addMovie(const QString&, int, const QString&, const QString&);
     void addSession(int, int, int);
+    void uploadPoster(const QString&);
+    void addMovieWithPoster(const QString&, int, const QString&, const QString&);
+    void registerAdmin(const QString&, const QString&);
+    void loginAdmin(const QString&, const QString&);
+    QJsonArray getAllMovies();
     QVector<int> getReservePlaces(int);
-
+    QVector<QByteArray> getInfoForAllMovie();
 
 signals:
     void registrationSuccess(const QString&);
@@ -35,13 +43,17 @@ signals:
     void hallError(const QString&);
     void reservePlaceSucces(const QString&);
     void reservePlaceError(const QString&);
+    void uploadFinished(const QString& fileUrl);
+    void uploadFailed(const QString& error);
 
 private slots:
     void onReplyFinished(QNetworkReply*);
+    void onUploadProgress(qint64 bytesSent, qint64 bytesTotal);
+    void onUploadFinished();
+    void onNetworkError(QNetworkReply::NetworkError error);
     void onReadyRead();
 
 private:
-    //QVector<int> getArrfromJson();
     QVector<int> m_reservedPlaces;
 
     QNetworkAccessManager* manager;
@@ -49,8 +61,10 @@ private:
     QString publicApiKey = "cinema_public_key_2024";
     QString adminApiKey = "key_my_pc";
 
-    QNetworkReply *m_reply;
+    QString takeLink();
 
+    QNetworkReply *m_reply;
+    QByteArray m_data;
 };
 
 #endif // APIMANAGER_H

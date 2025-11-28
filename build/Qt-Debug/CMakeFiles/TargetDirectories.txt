@@ -1,0 +1,9 @@
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/cinema.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/edit_cache.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/rebuild_cache.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/list_install_components.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/install.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/install/local.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/install/strip.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/cinema_autogen_timestamp_deps.dir
+/Users/admin/Desktop/English/Cinema/build/Qt-Debug/CMakeFiles/cinema_autogen.dir

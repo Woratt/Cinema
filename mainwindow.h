@@ -8,6 +8,15 @@
 
 #include "apimanager.h"
 #include "user.h"
+#include "loadposter.h"
+#include "moviewidget.h"
+
+struct Movie {
+    int id;
+    QString title;
+    QString genre;
+    QString posterUrl;
+};
 
 QT_BEGIN_NAMESPACE
 namespace Ui {
@@ -32,12 +41,22 @@ private:
     QVector<QPushButton*> m_placesButtons;
     QVector<QPushButton*> m_sessionButtons;
     QVector<QPushButton*> m_registButtons;
+    QList<Movie> m_moviesList;
+
+    QTabletEvent *m_table;
+    LoadPoster *m_loadPoster;
 
     // set connections
     void setUpConnections();
+    void setMovies();
+    void adjustTableSize();
+    void setupTable();
+    void resizeEvent(QResizeEvent *event) override;
 
     //Api
     ApiManager *m_apiManager;
+
+    void parseMoviesArr(const QJsonArray&);
 
     //User
     User *m_user;
