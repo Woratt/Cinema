@@ -212,6 +212,41 @@ QVector<int> ApiManager::getReservePlaces(int session_id){
     return m_reservedPlaces;
 }
 
+QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
+    QVector<Session> sessions;
+    QUrl url(baseURL + "/getSessionsForMovies");
+    QUrlQuery query;
+    query.addQueryItem("movie_id", QString::number(movie_id));
+    url.setQuery(query);
+
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(m_data);
+    QJsonArray sessionsArray = doc.array();
+    for (int i = 0; i < sessionsArray.size(); ++i) {
+        //m_reservedPlaces.push_back(seatsArray[i].toInt());
+        QJsonObject sessionObj = sessionsArray[i].toObject();
+        Session session;
+        session.id = sessionObj["id"].toInt();
+        session.hall_id = sessionObj["hall_id"].toInt();
+        //session.duration
+        session.start_time = sessionObj["start_time"].toInt();
+        sessions.append(session);
+    }
+
+    m_data.clear();
+
+    return sessions;
+}
+
 QVector<QByteArray> ApiManager::getInfoForAllMovie(){
     QVector<QByteArray> movies;
     int movie_id = 0;

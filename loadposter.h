@@ -18,14 +18,9 @@ public:
     void cancelLoading();
 signals:
     void imageLoaded(const QPixmap &pixmap);
-    //void loadingProgress(int percent);
     void loadingFailed(const QString &errorMessage);
 private:
-    //void onReadyRead();
-    //void onFinished();
-    //void onError(QNetworkReply::NetworkError);
     void onReplyFinished();
-    //void onDownloadProgress(qint64 bytesReceived, qint64 bytesTotal);
 
     QNetworkAccessManager *m_networkManager;
     QNetworkReply *m_currentReply;

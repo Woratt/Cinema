@@ -7,7 +7,6 @@ MovieWidget::MovieWidget(QWidget *parent)
     , m_pixmapChanged(false)
 {
     setupUI();
-    //setMinimumSize(150, 230);
     setFixedSize(150, 230);
     setSizePolicy(QSizePolicy::Fixed, QSizePolicy::Fixed);
     setCursor(Qt::PointingHandCursor);

@@ -22,14 +22,11 @@ void LoadPoster::loadImage(const QUrl &imageUrl)
     }
 
     QNetworkRequest request(imageUrl);
-    //request.setRawHeader("User-Agent", "MovieWidget App 1.0");
 
     m_currentReply = m_networkManager->get(request);
 
     connect(m_currentReply, &QNetworkReply::finished,
             this, &LoadPoster::onReplyFinished);
-    //connect(m_currentReply, &QNetworkReply::downloadProgress,
-    //        this, &LoadPoster::onDownloadProgress);
 }
 
 void LoadPoster::cancelLoading()

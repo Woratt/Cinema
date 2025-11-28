@@ -31,20 +31,14 @@ MainWindow::MainWindow(QWidget *parent)
 }
 
 void MainWindow::setupTable() {
-    // Заборонити розтягування таблиці
-    //ui->tableWidget->setSizePolicy(QSizePolicy::, QSizePolicy::Fixed);
     ui->tableWidget->setMinimumSize(1050, 250);
 
-    // Приховати заголовки
     ui->tableWidget->verticalHeader()->setVisible(false);
     ui->tableWidget->horizontalHeader()->setVisible(false);
 
-    // Відключити сітку
     ui->tableWidget->setShowGrid(false);
 
-    // Відключити прокрутку
     ui->tableWidget->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
-   //->tableWidget->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
 }
 
 void MainWindow::resizeEvent(QResizeEvent *event) {
@@ -61,7 +55,6 @@ void MainWindow::adjustTableSize() {
     int columnWidth = tableWidth / ui->tableWidget->columnCount();
     int rowHeight = tableHeight / ui->tableWidget->rowCount();
 
-    // Встановлюємо розміри стовпців і рядків
     for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
         ui->tableWidget->setColumnWidth(col, 150);
     }
@@ -69,7 +62,6 @@ void MainWindow::adjustTableSize() {
         ui->tableWidget->setRowHeight(row, 250);
     }
 
-    // Оновлюємо розміри всіх віджетів
     for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
         for (int col = 0; col < ui->tableWidget->columnCount(); ++col) {
             QWidget *widget = ui->tableWidget->cellWidget(row, col);
@@ -102,7 +94,7 @@ void MainWindow::setMovies(){
         }
     }
     for (int row = 0; row < ui->tableWidget->rowCount(); ++row) {
-        ui->tableWidget->setRowHeight(row, 250); // Мінімальна висота для кожного рядка 50 пікселів
+        ui->tableWidget->setRowHeight(row, 250);
     }
 }
 

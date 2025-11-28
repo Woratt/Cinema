@@ -14,6 +14,13 @@
 #include <QHttpMultiPart>
 #include <QFileInfo>
 
+struct Session {
+    int id;
+    int duration;
+    int start_time;
+    int hall_id;
+};
+
 class ApiManager : public QWidget
 {
     Q_OBJECT
@@ -30,6 +37,7 @@ public:
     void addMovieWithPoster(const QString&, int, const QString&, const QString&);
     void registerAdmin(const QString&, const QString&);
     void loginAdmin(const QString&, const QString&);
+    QVector<Session> getSessionsForMovie(int);
     QJsonArray getAllMovies();
     QVector<int> getReservePlaces(int);
     QVector<QByteArray> getInfoForAllMovie();
