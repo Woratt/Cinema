@@ -212,6 +212,65 @@ QVector<int> ApiManager::getReservePlaces(int session_id){
     return m_reservedPlaces;
 }
 
+QVector<User> ApiManager::getAllUsers(){
+    QVector<User> users;
+    QUrl url(baseURL + "/getAllUsers");
+
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(m_data);
+    QJsonArray usersArray = doc.array();
+    for(int i = 0; i < usersArray.size(); ++i){
+        QJsonObject userObj = usersArray[i].toObject();
+        User user;
+        user.id = userObj["id"].toInt();
+        user.login = userObj["login"].toString();
+        user.email = userObj["email"].toString();
+        users.append(user);
+    }
+    m_data.clear();
+
+    return users;
+
+}
+
+QVector<Admin> ApiManager::getAllAdmins(){
+    QVector<Admin> admins;
+    QUrl url(baseURL + "/getAllAdmins");
+
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(m_data);
+    QJsonArray adminsArray = doc.array();
+    for(int i = 0; i < adminsArray.size(); ++i){
+        QJsonObject adminObj = adminsArray[i].toObject();
+        Admin admin;
+        admin.id = adminObj["id"].toInt();
+        admin.login = adminObj["login"].toString();
+        admin.ip = adminObj["ip"].toString();
+        admins.append(admin);
+    }
+    m_data.clear();
+
+    return admins;
+}
+
 QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
     QVector<Session> sessions;
     QUrl url(baseURL + "/getSessionsForMovies");
@@ -220,6 +279,7 @@ QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
     url.setQuery(query);
 
     QNetworkRequest request(url);
+    //request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
     request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
 
     m_reply = manager->get(request);
@@ -232,13 +292,32 @@ QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
     QJsonDocument doc = QJsonDocument::fromJson(m_data);
     QJsonArray sessionsArray = doc.array();
     for (int i = 0; i < sessionsArray.size(); ++i) {
-        //m_reservedPlaces.push_back(seatsArray[i].toInt());
         QJsonObject sessionObj = sessionsArray[i].toObject();
         Session session;
         session.id = sessionObj["id"].toInt();
-        session.hall_id = sessionObj["hall_id"].toInt();
-        //session.duration
+        session.hallName = sessionObj["hall_name"].toString();
         session.start_time = sessionObj["start_time"].toInt();
+        qDebug() << session.date;
+        QString dateString = sessionObj["date"].toString();
+
+        QStringList parts = dateString.split(" ");
+        if (parts.size() >= 4) {
+            QString dayStr = parts[1];
+            QString monthStr = parts[2];
+            QString yearStr = parts[3];
+
+            QMap<QString, int> months;
+            months["Jan"] = 1; months["Feb"] = 2; months["Mar"] = 3;
+            months["Apr"] = 4; months["May"] = 5; months["Jun"] = 6;
+            months["Jul"] = 7; months["Aug"] = 8; months["Sep"] = 9;
+            months["Oct"] = 10; months["Nov"] = 11; months["Dec"] = 12;
+
+            int day = dayStr.toInt();
+            int month = months.value(monthStr, 1);
+            int year = yearStr.toInt();
+
+            session.date = QDate(year, month, day);
+        }
         sessions.append(session);
     }
 
@@ -247,35 +326,64 @@ QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
     return sessions;
 }
 
-QVector<QByteArray> ApiManager::getInfoForAllMovie(){
-    QVector<QByteArray> movies;
-    int movie_id = 0;
-    while(true){
-        QUrl url(baseURL + "/getMovie");
-        QUrlQuery query;
-        query.addQueryItem("movie_id", QString::number(movie_id));
-        url.setQuery(query);
+void ApiManager::deleteUser(int user_id){
+    QJsonObject json;
+    json["user_id"] = user_id;
 
-        QNetworkRequest request(url);
-        request.setRawHeader("X-API-Key", publicApiKey.toUtf8());
+    QJsonDocument doc(json);
 
-        m_reply = manager->get(request);
+    QByteArray data = doc.toJson();
 
-        QEventLoop loop;
-        connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
-        connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
-        loop.exec();
+    QNetworkRequest request(QUrl(baseURL + "/deleteUser"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
 
-        if(m_data.isEmpty()){
-            break;
-        }else{
-            movies.append(m_data);
-            m_data.clear();
-            m_reply->deleteLater();
-            ++movie_id;
-        }
-    }
-    return movies;
+    manager->post(request, data);
+}
+
+void ApiManager::deleteAdmin(int admin_id){
+    QJsonObject json;
+    json["admin_id"] = admin_id;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/deleteAdmin"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    manager->post(request, data);
+}
+
+void ApiManager::deleteSession(int session_id){
+    QJsonObject json;
+    json["session_id"] = session_id;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/deleteSession"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    manager->post(request, data);
+}
+
+void ApiManager::deleteMovie(int movie_id){
+    QJsonObject json;
+    json["movie_id"] = movie_id;
+
+    QJsonDocument doc(json);
+
+    QByteArray data = doc.toJson();
+
+    QNetworkRequest request(QUrl(baseURL + "/deleteMovie"));
+    request.setHeader(QNetworkRequest::ContentTypeHeader, "application/json");
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    manager->post(request, data);
 }
 
 void ApiManager::uploadPoster(const QString& filePath){

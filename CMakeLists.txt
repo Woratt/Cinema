@@ -19,6 +19,8 @@ if(${QT_VERSION_MAJOR} GREATER_EQUAL 6)
 find_package(Qt6 REQUIRED COMPONENTS Core)
 find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 find_package(Qt6 REQUIRED COMPONENTS Core)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
+find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
 
     qt_add_executable(cinema
         MANUAL_FINALIZATION
@@ -30,9 +32,11 @@ find_package(Qt6 REQUIRED COMPONENTS Core)
         mainwindow.ui
         resource.qrc
         apimanager.h apimanager.cpp
-        user.h user.cpp
+        #user.h user.cpp
         moviewidget.h moviewidget.cpp
         loadposter.h loadposter.cpp
+        windowsessions.h windowsessions.cpp
+        sessionwidget.h sessionwidget.cpp
 
     )
 # Define target properties for Android with Qt 6 as:
@@ -66,6 +70,8 @@ target_link_libraries(cinema PRIVATE Qt6::Core Qt6::Core Qt6::Network)
 target_link_libraries(cinema PRIVATE Qt6::Core)
 target_link_libraries(cinema PRIVATE Qt6::Core Qt6::Widgets)
 target_link_libraries(cinema PRIVATE Qt6::Core)
+target_link_libraries(cinema PRIVATE Qt6::Core Qt6::Widgets)
+target_link_libraries(cinema PRIVATE Qt6::Core Qt6::Widgets)
 
 # Qt for iOS sets MACOSX_BUNDLE_GUI_IDENTIFIER automatically since Qt 6.1.
 # If you are developing for iOS or macOS you should consider setting an

@@ -19,15 +19,19 @@ MainWindow::MainWindow(QWidget *parent)
                         ui->pushButton_24, ui->pushButton_25, ui->pushButton_26,
                         ui->pushButton_27, ui->pushButton_28,
                         };
-
+    m_windowSessions = new WindowSessions(this);
     m_apiManager = new ApiManager();
     m_loadPoster = new LoadPoster(this);
     ui->tableWidget->horizontalHeader()->setStretchLastSection(true);
     ui->tableWidget->setColumnCount(7);
     ui->tableWidget->setRowCount(10);
+    ui->stackedWidget->addWidget(m_windowSessions);
     setupTable();
-
     setUpConnections();
+    setMovies();
+    ui->lineEdit_2->setText("Andrii4");
+    ui->lineEdit_3->setText("12345678");
+    m_apiManager->addSession(1, 1, 0);
 }
 
 void MainWindow::setupTable() {
@@ -83,7 +87,10 @@ void MainWindow::setMovies(){
         connect(loadPoster, &LoadPoster::imageLoaded, this, [=](const QPixmap& map){
             movieWidget->setMovieData(m_moviesList[i].id, m_moviesList[i].title, map);
             ui->tableWidget->setCellWidget(row, col, movieWidget);
-            qDebug() << row << " " << col;
+        });
+        connect(movieWidget, &MovieWidget::doubleClicked, this, [=](){
+            m_windowSessions->setSessions(m_apiManager->getSessionsForMovie(movieWidget->movieId()), movieWidget->movieId());
+            ui->stackedWidget->setCurrentWidget(m_windowSessions);
         });
 
         if((i + 1) % 7 == 0){
@@ -101,7 +108,7 @@ void MainWindow::setMovies(){
 void MainWindow::setUpConnections(){
     int numOfSession = 1;
     int numOfPlace = 1;
-    for(auto sessionBt : m_sessionButtons){
+    /*for(auto sessionBt : m_sessionButtons){
         connect(sessionBt, &QPushButton::clicked, this, [=](){
             selectSession(numOfSession);
         });
@@ -109,7 +116,7 @@ void MainWindow::setUpConnections(){
         connect(sessionBt, &QPushButton::clicked, this, &MainWindow::newWindow);
 
         ++numOfSession;
-    }
+    }*/
     for(auto placeBt : m_placesButtons){
         connect(placeBt, &QPushButton::clicked, this, [=](){
             selectPlaces(numOfPlace);
@@ -121,8 +128,6 @@ void MainWindow::setUpConnections(){
     connect(this, &MainWindow::reservedPlaces, this, &MainWindow::onReservePlaces);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
     connect(ui->pushButton_32, &QPushButton::clicked, this, &MainWindow::onUnReservePlaces);
-
-
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
     connect(ui->pushButton_29, &QPushButton::clicked, this, &MainWindow::logIn);
@@ -136,6 +141,16 @@ void MainWindow::setUpConnections(){
     connect(m_apiManager, &ApiManager::registrationError, this, &MainWindow::errorRegIn);
 
     connect(m_apiManager, &ApiManager::loginError, this, &MainWindow::errorLogIn);
+
+    connect(m_windowSessions, &WindowSessions::sessionSelected, this, [=](int sessionId){
+        selectSession(sessionId);
+        newWindow();
+    });
+    connect(m_windowSessions, &WindowSessions::backRequested, this, [=](){
+         ui->stackedWidget->setCurrentWidget(ui->page);
+    });
+    //connect(m_windowSessions, &WindowSessions::sessionSelected, this, &MainWindow::markReservePlaces);
+    //onnect(m_windowSessions, &WindowSessions::sessionSelected, this, &MainWindow::newWindow);
 }
 
 
@@ -144,9 +159,11 @@ MainWindow::~MainWindow()
     delete m_apiManager;
     delete ui;
 }
+
 void MainWindow::newWindow(){
-    ui->stackedWidget->setCurrentIndex(3);
+    ui->stackedWidget->setCurrentWidget(ui->page_2);
 }
+
 void MainWindow::backWindow(){
     for (QPushButton *button : m_placesButtons) {
         button->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
@@ -157,7 +174,7 @@ void MainWindow::backWindow(){
     ui->suma->setText("Сума квитка: 0 грн");
     ui->label_2->setText("Здача :");
     ui->lineEdit->clear();
-    ui->stackedWidget->setCurrentIndex(2);
+    ui->stackedWidget->setCurrentWidget(m_windowSessions);
 }
 void MainWindow::colourSeat(){
     QPushButton *clickedButton = qobject_cast<QPushButton*>(sender());
@@ -190,6 +207,7 @@ void MainWindow::onCalculateRemainder(){
 
 void MainWindow::selectSession(int numOfSession){
     m_session = numOfSession;
+    markReservePlaces();
 }
 
 void MainWindow::selectPlaces(int numOfPlace){
@@ -216,7 +234,6 @@ void MainWindow::regDone(){
     ui->lineEdit_4->clear();
     ui->lineEdit_5->clear();
     ui->lineEdit_6->clear();
-    setMovies();
 }
 
 void MainWindow::onReservePlaces(){

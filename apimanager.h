@@ -18,7 +18,20 @@ struct Session {
     int id;
     int duration;
     int start_time;
-    int hall_id;
+    QString hallName;
+    QDate date;
+};
+
+struct Admin{
+    int id;
+    QString login;
+    QString ip;
+};
+
+struct User{
+    int id;
+    QString login;
+    QString email;
 };
 
 class ApiManager : public QWidget
@@ -37,10 +50,15 @@ public:
     void addMovieWithPoster(const QString&, int, const QString&, const QString&);
     void registerAdmin(const QString&, const QString&);
     void loginAdmin(const QString&, const QString&);
+    void deleteUser(int);
+    void deleteAdmin(int);
+    void deleteSession(int);
+    void deleteMovie(int);
     QVector<Session> getSessionsForMovie(int);
+    QVector<User> getAllUsers();
+    QVector<Admin> getAllAdmins();
     QJsonArray getAllMovies();
     QVector<int> getReservePlaces(int);
-    QVector<QByteArray> getInfoForAllMovie();
 
 signals:
     void registrationSuccess(const QString&);

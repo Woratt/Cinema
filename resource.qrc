@@ -1,7 +1,0 @@
-<RCC>
-    <qresource prefix="/img">
-        <file>img/IMAGE_2_3_XL (1).jpg</file>
-        <file>img/IMAGE_2_3_XL.jpg</file>
-        <file>img/images.jfif</file>
-    </qresource>
-</RCC>

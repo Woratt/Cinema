@@ -5,11 +5,13 @@
 #include <QStackedWidget>
 #include <QPushButton>
 #include <QMessageBox>
+#include <QTimer>
 
 #include "apimanager.h"
-#include "user.h"
+//#include "user.h"
 #include "loadposter.h"
 #include "moviewidget.h"
+#include "windowsessions.h"
 
 struct Movie {
     int id;
@@ -45,6 +47,8 @@ private:
 
     QTabletEvent *m_table;
     LoadPoster *m_loadPoster;
+
+    WindowSessions *m_windowSessions;
 
     // set connections
     void setUpConnections();

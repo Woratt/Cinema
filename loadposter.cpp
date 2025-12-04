@@ -60,6 +60,3 @@ void LoadPoster::onReplyFinished()
     m_currentReply->deleteLater();
     m_currentReply = nullptr;
 }
-
-
-
