@@ -30,9 +30,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
         mainwindow.cpp
         mainwindow.h
         mainwindow.ui
-        resource.qrc
         apimanager.h apimanager.cpp
-        #user.h user.cpp
         moviewidget.h moviewidget.cpp
         loadposter.h loadposter.cpp
         windowsessions.h windowsessions.cpp

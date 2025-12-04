@@ -29,9 +29,6 @@ MainWindow::MainWindow(QWidget *parent)
     setupTable();
     setUpConnections();
     setMovies();
-    ui->lineEdit_2->setText("Andrii4");
-    ui->lineEdit_3->setText("12345678");
-    m_apiManager->addSession(1, 1, 0);
 }
 
 void MainWindow::setupTable() {
