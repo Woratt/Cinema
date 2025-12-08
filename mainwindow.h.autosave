@@ -8,7 +8,6 @@
 #include <QTimer>
 
 #include "apimanager.h"
-//#include "user.h"
 #include "loadposter.h"
 #include "moviewidget.h"
 #include "windowsessions.h"
@@ -37,7 +36,6 @@ private:
     QVector<QPushButton*> m_placesButtons;
     QVector<QPushButton*> m_sessionButtons;
     QVector<QPushButton*> m_registButtons;
-    //QList<Movie> m_moviesList;
 
     QTabletEvent *m_table;
     LoadPoster *m_loadPoster;
@@ -53,8 +51,6 @@ private:
 
     //Api
     ApiManager *m_apiManager;
-
-    void parseMoviesArr(const QJsonArray&);
 
     //User
     User *m_user;

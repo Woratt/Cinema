@@ -57,9 +57,9 @@ void WindowSessions::setSessions(const QVector<Session>& sessions, int movieId){
 
         SessionWidget *sessionWidget = new SessionWidget(
                 session.id,
-                parseTime(session.start_time),
+                session.time,
                 session.hallName,
-                session.date.toString("dd.MM.yyyy")
+                session.date
             );
         int row = i / sessionsPerRow_;
         int col = i % sessionsPerRow_;
@@ -70,20 +70,4 @@ void WindowSessions::setSessions(const QVector<Session>& sessions, int movieId){
                     emit sessionSelected(sessionId);
                 });
     }
-}
-
-QString WindowSessions::parseTime(int time){
-    QString strTime = "";
-    if(time / 60 < 10){
-        strTime = QString("0" + QString::number(time / 60));
-    }else{
-        strTime = QString::number(time / 60);
-    }
-    strTime += ":";
-    if(time % 60 < 10){
-        strTime += QString("0" + QString::number(time % 60));
-    }else{
-        strTime += QString::number(time % 60);
-    }
-    return strTime;
 }

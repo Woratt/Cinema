@@ -37,7 +37,6 @@ private:
     QScrollArea *scrollArea_;
     QGridLayout *gridLayout_;
     QWidget *sessionsContainer_;
-    QString parseTime(int);
 
     QVBoxLayout *sessionsLayout_;
     QVector<SessionWidget*> sessionWidgets_;
