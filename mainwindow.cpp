@@ -3,6 +3,7 @@
 #include <QTableWidget>
 #include <QCheckBox>
 #include <QLineEdit>
+#include <QFileDialog>
 MainWindow::MainWindow(QWidget *parent)
     : QMainWindow(parent)
     , ui(new Ui::MainWindow)
@@ -10,6 +11,8 @@ MainWindow::MainWindow(QWidget *parent)
     ui->setupUi(this);
     ui->stackedWidget->setCurrentIndex(0);
     ui->lineEdit_3->setEchoMode(QLineEdit::Password);
+    ui->lineEdit_8->setEchoMode(QLineEdit::Password);
+    ui->logoutButton->setVisible(false);
 
     m_placesButtons = {ui->pushButton_9, ui->pushButton_10, ui->pushButton_11,
                         ui->pushButton_12, ui->pushButton_13, ui->pushButton_14,
@@ -28,6 +31,8 @@ MainWindow::MainWindow(QWidget *parent)
     setupTable();
     setUpConnections();
     setMovies();
+    m_apiManager->getAllMovies();
+    m_apiManager->getAllHalls();
 }
 
 void MainWindow::setupTable() {
@@ -134,13 +139,17 @@ void MainWindow::setUpConnections(){
 
     connect(this, &MainWindow::reservedPlaces, this, &MainWindow::onReservePlaces);
     connect(ui->pushButton_8, &QPushButton::clicked, this, &MainWindow::onCalculateRemainder);
-    connect(ui->pushButton_32, &QPushButton::clicked, this, &MainWindow::onUnReservePlaces);
+    connect(ui->pushButton_3, &QPushButton::clicked, this, &MainWindow::onUnReservePlaces);
 
     connect(ui->pushButton_2, &QPushButton::clicked, this, &MainWindow::backWindow);
     connect(ui->pushButton_29, &QPushButton::clicked, this, &MainWindow::logIn);
     connect(ui->pushButton_34, &QPushButton::clicked, this, &MainWindow::adminlogIn);
     connect(ui->pushButton_30, &QPushButton::clicked, this, &MainWindow::goToPageRegIn);
     connect(ui->pushButton_31, &QPushButton::clicked, this, &MainWindow::regIn);
+    connect(ui->pushButton, &QPushButton::clicked, this, &MainWindow::goToAdmin);
+    connect(ui->pushButton_33, &QPushButton::clicked, this, &MainWindow::backPage);
+    connect(ui->pushButton_4, &QPushButton::clicked, this, &MainWindow::backPage);
+    connect(ui->logoutButton, &QPushButton::clicked, this, &MainWindow::backPage);
 
     connect(m_apiManager, &ApiManager::loginSuccess, this, &MainWindow::regDone);
     connect(m_apiManager, &ApiManager::adminLoginSuccess, this, &MainWindow::regDone);
@@ -158,7 +167,15 @@ void MainWindow::setUpConnections(){
     connect(m_windowSessions, &WindowSessions::backRequested, this, [=](){
          ui->stackedWidget->setCurrentWidget(ui->page);
     });
+    connect(ui->addSessionButton, &QPushButton::clicked,  this, &MainWindow::on_addSessionButton_clicked);
+    connect(m_apiManager, &ApiManager::sessionAddSuccess, this, &MainWindow::handleSessionAddSuccess);
+    connect(m_apiManager, &ApiManager::sessionAddError, this, &MainWindow::handleSessionAddError);
     connect(ui->checkBox, &QCheckBox::toggled, this, &MainWindow::showPassword);
+    connect(ui->checkBox_2, &QCheckBox::toggled, this, &MainWindow::showPasswordAdmin);
+
+    connect(ui->registerAdminButton, &QPushButton::clicked, this, &MainWindow::on_registerAdminButton_clicked);
+    connect(m_apiManager, &ApiManager::adminRegistrationSuccess, this, &MainWindow::handleAdminRegistrationSuccess);
+    connect(m_apiManager, &ApiManager::adminRegistrationError, this, &MainWindow::handleAdminRegistrationError);
 }
 
 
@@ -171,10 +188,22 @@ MainWindow::~MainWindow()
 void MainWindow::newWindow(){
     ui->stackedWidget->setCurrentWidget(ui->page_2);
 }
+void MainWindow::backPage(){
+    m_isAdmin = false;
+    ui->logoutButton->setVisible(false);
+    ui->stackedWidget->setCurrentIndex(0);
+    ui->lineEdit_2->clear();
+    ui->lineEdit_3->clear();
+    ui->lineEdit_4->clear();
+    ui->lineEdit_5->clear();
+    ui->lineEdit_6->clear();
+    ui->lineEdit_7->clear();
+    ui->lineEdit_8->clear();
+}
 
 void MainWindow::backWindow(){
     for (QPushButton *button : m_placesButtons) {
-        button->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
+        button->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
         button->setChecked(false);
     }
     m_numOfPlaces.clear();
@@ -189,11 +218,11 @@ void MainWindow::colourSeat(){
     int sumaBillet = 200;
 
     if(clickedButton->isChecked()){
-        clickedButton->setStyleSheet("background-color: yellow;color: black;font-weight: bold;border: none;border-radius: 8px;");
+        clickedButton->setStyleSheet("background-color: yellow; color: black;font-weight: bold;border: none;border-radius: 8px;");
         m_rez += sumaBillet;
     }
     else {
-        clickedButton->setStyleSheet("background-color: green;;color: white;font-weight: bold;border: none;border-radius: 8px;");
+        clickedButton->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
         m_rez -= sumaBillet;
 
     }
@@ -243,9 +272,13 @@ void MainWindow::regIn(){
 }
 
 void MainWindow::regDone(){
+    ui->logoutButton->setVisible(true);
     if(m_isAdmin){
         ui->stackedWidget->setCurrentIndex(5);
         loadUserList();
+        loadAdminList();
+        loadSessionCreationData();
+        loadAdminMovieList();
     }else{
         ui->stackedWidget->setCurrentIndex(3);
     }
@@ -264,7 +297,7 @@ void MainWindow::onReservePlaces(){
         m_apiManager->reservePlace(m_session, numOfPlace);
         if (numOfPlace > 0 && numOfPlace <= m_placesButtons.size()) {
             QPushButton *buttonToReserve = m_placesButtons[numOfPlace - 1];
-            buttonToReserve->setStyleSheet("background-color: grey;color: black;font-weight: bold;border: none;border-radius: 8px;");
+            buttonToReserve->setStyleSheet("background-color: grey; color: black;font-weight: bold;border: none;border-radius: 8px;");
             buttonToReserve->setEnabled(false);
         }
     }
@@ -309,7 +342,7 @@ void MainWindow::parseMoviesArr(const QJsonArray& moviesArr){
         movie.genre = movieObj["genre"].toString();
         movie.posterUrl = movieObj["linkPoster"].toString();
 
-        //m_moviesList.append(movie);
+
     }
 }
 
@@ -323,7 +356,10 @@ void MainWindow::errorRegIn(const QString& message){
 void MainWindow::adminPage(){
 
     ui->stackedWidget->setCurrentIndex(5);
+    loadSessionCreationData();
     loadUserList();
+    loadAdminList();
+    loadAdminMovieList();
 }
 void MainWindow::loadUserList()
 {
@@ -348,12 +384,74 @@ void MainWindow::loadUserList()
         loginItem->setFlags(loginItem->flags() & ~Qt::ItemIsEditable);
         emailItem->setFlags(emailItem->flags() & ~Qt::ItemIsEditable);
         QPushButton* deleteButton = new QPushButton("Видалити");
+        deleteButton->setStyleSheet("QPushButton { background-color: #dc3545; color: white; border: 1px solid #dc3545; padding: 5px; }");
         table->setCellWidget(i, 3, deleteButton);
+        table->horizontalHeader()->setStretchLastSection(true);
+        table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
         connect(deleteButton, &QPushButton::clicked, [this, userId = user.id]() {
             this->deleteUserClicked(userId);
         });
     }
+    for (int col = 0; col < 4; ++col) {
+        table->horizontalHeader()->setSectionResizeMode(col, QHeaderView::Fixed);
+    }
+
+    table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
     table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setStretchLastSection(true);
+
+}
+void MainWindow::loadAdminList(){
+    QTableWidget* table = ui->adminsTableWidget;
+    QVector<Admin> admins = m_apiManager->getAllAdmins();
+    table->clearContents();
+    table->setRowCount(admins.size());
+    table->setColumnCount(4);
+    QStringList headers;
+    headers << "ID" << "Логін" << "IP-адреса" << "Дія";
+    table->setHorizontalHeaderLabels(headers);
+    table->verticalHeader()->setVisible(false);
+    table->setVerticalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->setHorizontalScrollBarPolicy(Qt::ScrollBarAlwaysOff);
+    table->horizontalHeader()->setSectionResizeMode(0, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(2, QHeaderView::Stretch);
+    table->horizontalHeader()->setSectionResizeMode(3, QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setStretchLastSection(true);
+    for (int i = 0; i < admins.size(); ++i) {
+        const Admin& admin = admins.at(i);
+        QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(admin.id));
+        QTableWidgetItem* loginItem = new QTableWidgetItem(admin.login);
+        QTableWidgetItem* ipItem = new QTableWidgetItem(admin.ip);
+        table->setItem(i, 0, idItem);
+        table->setItem(i, 1, loginItem);
+        table->setItem(i, 2, ipItem);
+        idItem->setFlags(idItem->flags() & ~Qt::ItemIsEditable);
+        loginItem->setFlags(loginItem->flags() & ~Qt::ItemIsEditable);
+        ipItem->setFlags(ipItem->flags() & ~Qt::ItemIsEditable);
+        QPushButton* deleteButton = new QPushButton("Видалити");
+        table->setCellWidget(i, 3, deleteButton);
+        deleteButton->setStyleSheet("QPushButton { background-color: #dc3545; color: white; border: 1px solid #dc3545; padding: 5px; }");
+        connect(deleteButton, &QPushButton::clicked, [this, adminId = admin.id]() {
+            this->deleteAdminClicked(adminId);
+        });
+    }
+}
+
+void MainWindow::deleteAdminClicked(int adminId)
+{
+
+    QMessageBox::StandardButton reply;
+    reply = QMessageBox::question(this, "Підтвердження видалення",
+                                  "Ви впевнені, що хочете видалити адміністратора з ID " + QString::number(adminId) + "?",
+                                  QMessageBox::Yes | QMessageBox::No);
+
+    if (reply == QMessageBox::Yes) {
+        m_apiManager->deleteAdmin(adminId);
+        loadAdminList();
+        QMessageBox::information(this, "Успіх", "Адміністратор з ID " + QString::number(adminId) + " успішно видалений.");
+    }
 }
 
 void MainWindow::deleteUserClicked(int userId)
@@ -370,10 +468,169 @@ void MainWindow::deleteUserClicked(int userId)
     loadUserList();
     QMessageBox::information(this, "Успіх", "Користувач з ID " + QString::number(userId) + " успішно видалений.");
 }
+void MainWindow::on_addMovieButton_clicked()
+{
+    QString title = ui->movieTitleEdit->text();
+    int duration = ui->movieDurationEdit->text().toInt();
+    QString genre = ui->movieGenreEdit->text();
+    QString filePath = QFileDialog::getOpenFileName(this,
+                                                    "Вибрати постер для фільму",
+                                                    QDir::homePath(),
+                                                    "Зображення (*.png *.jpg *.jpeg)");
+
+    if (filePath.isEmpty()) {
+        QMessageBox::warning(this, "Попередження", "Вибір файлу постера скасовано.");
+        return;
+    }
+    if (title.isEmpty() || duration <= 0 || genre.isEmpty()) {
+        QMessageBox::critical(this, "Помилка", "Будь ласка, заповніть усі поля коректними даними.");
+        return;
+    }
+    m_apiManager->addMovie(title, duration, genre, filePath);
+
+    QMessageBox::information(this, "Завантаження", "Розпочато завантаження постера та додавання фільму. Очікуйте...");
+}
+void MainWindow::handleMovieAddSuccess(const QString& message)
+{
+    QMessageBox::information(this, "Успіх", "Фільм успішно додано: " + message);
+
+    setMovies();
+    ui->movieTitleEdit->clear();
+    ui->movieDurationEdit->clear();
+    ui->movieGenreEdit->clear();
+}
+
+void MainWindow::handleMovieAddError(const QString& error)
+{
+    QMessageBox::critical(this, "Помилка", "Помилка додавання фільму: " + error);
+}
+void MainWindow::loadSessionCreationData()
+{
+    ui->sessionMovieComboBox->clear();
+    ui->sessionHallComboBox->clear();
+    QVector<Movie> movies = m_apiManager->getAllMovies();
+    for (const Movie& movie : movies) {
+        ui->sessionMovieComboBox->addItem(movie.title, movie.id);
+    }
+    ui->sessionHallComboBox->addItem("Зал 1 (ID: 1)", 1);
+    ui->sessionHallComboBox->addItem("Зал 2 (ID: 2)", 2);
+    ui->sessionDateTimeEdit->setDateTime(QDateTime::currentDateTime().addSecs(60));
+}
+void MainWindow::on_addSessionButton_clicked()
+{
+    int movie_id = ui->sessionMovieComboBox->currentData().toInt();
+    int hall_id = ui->sessionHallComboBox->currentData().toInt();
+
+    QDateTime selectedDateTime = ui->sessionDateTimeEdit->dateTime();
+    if (movie_id <= 0 || hall_id <= 0 || selectedDateTime < QDateTime::currentDateTime()) {
+        QMessageBox::critical(this, "Помилка", "Будь ласка, оберіть фільм, зал та час у майбутньому.");
+        return;
+    }
+    QString dateTimeString = selectedDateTime.toString("yyyy-MM-dd hh:mm:ss");
+    ui->addSessionButton->setEnabled(false);
+    m_apiManager->addSession(movie_id, hall_id, dateTimeString);
+}
+void MainWindow::handleSessionAddSuccess(const QString& message)
+{
+    QMessageBox::information(this, "Успіх", "Сеанс успішно додано: " + message);
+    ui->addSessionButton->setEnabled(true);
+}
+
+void MainWindow::handleSessionAddError(const QString& error)
+{
+    QMessageBox::critical(this, "Помилка", "Помилка додавання сеансу: " + error);
+    ui->addSessionButton->setEnabled(true);
+}
+void MainWindow::loadAdminMovieList()
+{
+    QVector<Movie> movies = m_apiManager->getAllMovies();
+    QTableWidget* table = ui->adminMoviesTable;
+    table->setRowCount(movies.size());
+    table->setColumnCount(4);
+    QStringList headers;
+    headers << "ID" << "Назва" << "Жанр" << "Дії";
+    table->setHorizontalHeaderLabels(headers);
+    table->verticalHeader()->setVisible(false);
+    table->horizontalHeader()->setSectionResizeMode(QHeaderView::ResizeToContents);
+    table->horizontalHeader()->setSectionResizeMode(1, QHeaderView::Stretch);
+    for (int row = 0; row < movies.size(); ++row) {
+        const Movie& movie = movies.at(row);
+        QTableWidgetItem* idItem = new QTableWidgetItem(QString::number(movie.id));
+        table->setItem(row, 0, idItem);
+        QTableWidgetItem* titleItem = new QTableWidgetItem(movie.title);
+        table->setItem(row, 1, titleItem);
+        QTableWidgetItem* genreItem = new QTableWidgetItem(movie.genre);
+        table->setItem(row, 2, genreItem);
+        QPushButton* deleteBtn = new QPushButton("Видалити");
+        deleteBtn->setProperty("movieId", movie.id);
+        deleteBtn->setStyleSheet("QPushButton { background-color: #dc3545; color: white; border: 1px solid #dc3545; padding: 5px; }");
+        connect(deleteBtn, &QPushButton::clicked, this, &MainWindow::deleteMovieButtonClicked);
+        table->setCellWidget(row, 3, deleteBtn);
+    }
+    table->clearSelection();
+    table->setEditTriggers(QAbstractItemView::NoEditTriggers);
+}
+void MainWindow::deleteMovieButtonClicked()
+{
+    QPushButton* button = qobject_cast<QPushButton*>(sender());
+    if (!button) return;
+    int movieId = button->property("movieId").toInt();
+    if (QMessageBox::question(this, "Підтвердження",
+                              "Ви впевнені, що хочете видалити цей фільм? Це видалить усі пов'язані сеанси!",
+                              QMessageBox::Yes | QMessageBox::No) == QMessageBox::Yes)
+    {
+        m_apiManager->deleteMovie(movieId);
+    }
+}
+void MainWindow::handleMovieDeleteSuccess(const QString& message)
+{
+    QMessageBox::information(this, "Успіх", message);
+    loadAdminMovieList();
+}
+
+void MainWindow::handleMovieDeleteError(const QString& error)
+{
+    QMessageBox::critical(this, "Помилка", "Помилка видалення фільму: " + error);
+}
+void MainWindow::on_registerAdminButton_clicked()
+{
+    QString login = ui->adminLoginRegisterEdit->text();
+    QString password = ui->adminPasswordRegisterEdit->text();
+    QString admin_ip = ui->adminIpRegisterEdit->text();
+
+    if (login.isEmpty() || password.isEmpty() || admin_ip.isEmpty()) {
+        QMessageBox::warning(this, "Помилка", "Всі поля мають бути заповнені.");
+        return;
+    }
+    m_apiManager->registerAdmin(login, password, admin_ip);
+}
+
+void MainWindow::handleAdminRegistrationSuccess(const QString& message)
+{
+    QMessageBox::information(this, "Успіх", "Адміністратора успішно зареєстровано: " + message);
+    ui->adminLoginRegisterEdit->clear();
+    ui->adminPasswordRegisterEdit->clear();
+    ui->adminIpRegisterEdit->clear();
+    loadAdminList();
+}
+
+void MainWindow::handleAdminRegistrationError(const QString& error)
+{
+    QMessageBox::critical(this, "Помилка реєстрації", "Не вдалося зареєструвати адміністратора: " + error);
+
+
+}
 void MainWindow::showPassword(){
     if (ui->checkBox->isChecked()) {
         ui->lineEdit_3->setEchoMode(QLineEdit::Normal);
     } else {
         ui->lineEdit_3->setEchoMode(QLineEdit::Password);
+    }
+}
+void MainWindow::showPasswordAdmin(){
+    if (ui->checkBox_2->isChecked()) {
+        ui->lineEdit_8->setEchoMode(QLineEdit::Normal);
+    } else {
+        ui->lineEdit_8->setEchoMode(QLineEdit::Password);
     }
 }

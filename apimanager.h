@@ -41,6 +41,12 @@ struct Movie {
     QString posterUrl;
 };
 
+struct Hall{
+    int id;
+    QString name;
+    int seatCount;
+};
+
 class ApiManager : public QWidget
 {
     Q_OBJECT
@@ -55,13 +61,15 @@ public:
     void addSession(int, int, const QString&);
     void uploadPoster(const QString&);
     void addMovieWithPoster(const QString&, int, const QString&, const QString&);
-    void registerAdmin(const QString&, const QString&);
+    void registerAdmin(const QString&, const QString&, const QString&);
     void loginAdmin(const QString&, const QString&);
     void deleteUser(int);
     void deleteAdmin(int);
     void deleteSession(int);
     void deleteMovie(int);
     QVector<Session> getSessionsForMovie(int);
+    QVector<Session> getAllSessions();
+    QVector<Hall> getAllHalls();
     QVector<User> getAllUsers();
     QVector<Admin> getAllAdmins();
     QVector<Movie> getAllMovies();
@@ -80,7 +88,14 @@ signals:
     void reservePlaceError(const QString&);
     void uploadFinished(const QString& fileUrl);
     void uploadFailed(const QString& error);
-
+    void movieAddSuccess(const QString& message);
+    void movieAddError(const QString& error);
+    void sessionAddSuccess(const QString& message);
+    void sessionAddError(const QString& error);
+    void movieDeleteSuccess(const QString& message);
+    void movieDeleteError(const QString& error);
+    void adminRegistrationSuccess(const QString& message);
+    void adminRegistrationError(const QString& error);
 private slots:
     void onReplyFinished(QNetworkReply*);
     void onUploadProgress(qint64 bytesSent, qint64 bytesTotal);

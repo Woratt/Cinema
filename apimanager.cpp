@@ -5,10 +5,11 @@ ApiManager::ApiManager(QWidget* parent): QWidget(parent)
     manager = new QNetworkAccessManager(this);
     connect(manager, &QNetworkAccessManager::finished, this, &ApiManager::onReplyFinished);
 }
-void ApiManager::registerAdmin(const QString& login, const QString& password){
+void ApiManager::registerAdmin(const QString& login, const QString& password, const QString& admin_ip){
     QJsonObject json;
     json["login"] = login;
     json["password"] = password;
+    json["admin_ip"] = admin_ip;
 
     QJsonDocument doc(json);
 
@@ -338,6 +339,84 @@ QVector<Session> ApiManager::getSessionsForMovie(int movie_id){
     return sessions;
 }
 
+QVector<Session> ApiManager::getAllSessions(){
+    QVector<Session> sessions;
+    QUrl url(baseURL + "/getAllSessions");
+
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(m_data);
+    QJsonArray sessionsArray = doc.array();
+    for (int i = 0; i < sessionsArray.size(); ++i) {
+        QJsonObject sessionObj = sessionsArray[i].toObject();
+        Session session;
+        session.id = sessionObj["id"].toInt();
+        session.hallName = sessionObj["hall_name"].toString();
+        QString dateTime = sessionObj["session_datetime"].toString();
+
+        QStringList parts = dateTime.split(" ");
+        if (parts.size() >= 4) {
+            QString dayStr = parts[1];
+            QString monthStr = parts[2];
+            QString yearStr = parts[3];
+            QString time = parts[4].mid(0, 5);
+            qDebug() << parts.size();
+
+            QMap<QString, QString> months;
+            months["Jan"] = "01"; months["Feb"] = "02"; months["Mar"] = "03";
+            months["Apr"] = "04"; months["May"] = "05"; months["Jun"] = "06";
+            months["Jul"] = "07"; months["Aug"] = "08"; months["Sep"] = "09";
+            months["Oct"] = "10"; months["Nov"] = "11"; months["Dec"] = "12";
+
+            QString month = months[monthStr];
+
+            session.date = dayStr + "-" + month + "-" + yearStr;
+            session.time = time;
+
+        }
+        sessions.append(session);
+    }
+
+    m_data.clear();
+
+    return sessions;
+}
+
+QVector<Hall> ApiManager::getAllHalls(){
+    QVector<Hall> halls;
+    QUrl url(baseURL + "/getAllHalls");
+
+    QNetworkRequest request(url);
+    request.setRawHeader("X-API-Key", adminApiKey.toUtf8());
+
+    m_reply = manager->get(request);
+
+    QEventLoop loop;
+    connect(m_reply, &QNetworkReply::readyRead, this, &ApiManager::onReadyRead);
+    connect(m_reply, &QNetworkReply::finished, &loop, &QEventLoop::quit);
+    loop.exec();
+
+    QJsonDocument doc = QJsonDocument::fromJson(m_data);
+    QJsonArray hallsArray = doc.array();
+    for(int i = 0; i < halls.size(); ++i){
+        QJsonObject hallObj = hallsArray[i].toObject();
+        Hall hall;
+        hall.id = hallObj["id"].toInt();
+        hall.name = hallObj["name"].toString();
+        hall.seatCount = hallObj["seat_count"].toInt();
+        halls.append(hall);
+    }
+    return halls;
+}
+
 void ApiManager::deleteUser(int user_id){
     QJsonObject json;
     json["user_id"] = user_id;
@@ -492,6 +571,18 @@ void ApiManager::onReplyFinished(QNetworkReply* reply)
             if(url.contains("/register")){
                 emit registrationSuccess(message);
             }
+            else if(url.contains("/registerAdmin")){
+                emit adminRegistrationSuccess(message);
+            }
+            else if(url.contains("/deleteMovie")){
+                emit movieDeleteSuccess(message);
+            }
+            else if(url.contains("/addSession")){
+                emit sessionAddSuccess(message);
+            }
+            else if(url.contains("/addMovie")){
+                emit movieAddSuccess(message);
+            }
             else if(url.contains("/loginAdmin")){
                 emit adminLoginSuccess(message);
             }
@@ -503,6 +594,14 @@ void ApiManager::onReplyFinished(QNetworkReply* reply)
         }else{
             if(url.contains("/register")){
                 emit registrationError(message);
+            }else if(url.contains("/registerAdmin")){
+                emit adminRegistrationError(message);
+            }else if(url.contains("/deleteMovie")){
+                emit movieDeleteError(message);
+            }else if(url.contains("/addSession")){
+                emit sessionAddError(message);
+            }else if(url.contains("/addMovie")){
+                emit movieAddError(message);
             }else if(url.contains("/loginAdmin")){
                 emit adminLoginError(message);
             }else if(url.contains("/login")){

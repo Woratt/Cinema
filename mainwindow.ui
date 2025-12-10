@@ -6,19 +6,54 @@
    <rect>
     <x>0</x>
     <y>0</y>
-    <width>971</width>
-    <height>539</height>
+    <width>862</width>
+    <height>590</height>
    </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Expanding" vsizetype="Expanding">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
   </property>
   <property name="windowTitle">
    <string>MainWindow</string>
+  </property>
+  <property name="autoFillBackground">
+   <bool>false</bool>
   </property>
   <property name="styleSheet">
    <string notr="true">background-color: #1E1E1E;</string>
   </property>
   <widget class="QWidget" name="centralwidget">
    <layout class="QGridLayout" name="gridLayout_6">
-    <item row="2" column="2">
+    <item row="0" column="0" alignment="Qt::AlignmentFlag::AlignRight">
+     <widget class="QPushButton" name="logoutButton">
+      <property name="maximumSize">
+       <size>
+        <width>150</width>
+        <height>16777215</height>
+       </size>
+      </property>
+      <property name="styleSheet">
+       <string notr="true">QPushButton {
+    background-color: transparent;   
+    color: #FFFFFF;                  
+    border: none;                    
+    padding: 4px;
+    font-weight: bold;
+    text-decoration: underline;      
+}
+QPushButton:hover {
+    color: #00D1A0;
+}</string>
+      </property>
+      <property name="text">
+       <string>Вийти з профілю</string>
+      </property>
+     </widget>
+    </item>
+    <item row="1" column="0" rowspan="2">
      <widget class="QStackedWidget" name="stackedWidget">
       <property name="autoFillBackground">
        <bool>false</bool>
@@ -31,8 +66,34 @@
       </property>
       <widget class="QWidget" name="page_3">
        <layout class="QGridLayout" name="gridLayout_3">
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer_7">
+        <item row="1" column="4">
+         <spacer name="horizontalSpacer_8">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="0" column="2">
+         <spacer name="verticalSpacer_5">
+          <property name="orientation">
+           <enum>Qt::Orientation::Vertical</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>20</width>
+            <height>40</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="1">
+         <spacer name="horizontalSpacer_9">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
@@ -53,45 +114,6 @@
            <size>
             <width>40</width>
             <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="1">
-         <spacer name="horizontalSpacer_9">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="1" column="4">
-         <spacer name="horizontalSpacer_8">
-          <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>40</width>
-            <height>20</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
-        <item row="2" column="2">
-         <spacer name="verticalSpacer_6">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -234,8 +256,8 @@ QPushButton:hover {
           </item>
          </layout>
         </item>
-        <item row="0" column="2">
-         <spacer name="verticalSpacer_5">
+        <item row="2" column="2">
+         <spacer name="verticalSpacer_6">
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
           </property>
@@ -247,12 +269,58 @@ QPushButton:hover {
           </property>
          </spacer>
         </item>
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer_7">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="3" column="0">
+         <widget class="QPushButton" name="pushButton">
+          <property name="styleSheet">
+           <string notr="true">QPushButton {
+    background-color: transparent;   
+    color: #FFFFFF;                  
+    border: none;                    
+    padding: 4px;
+    font-weight: bold;
+    text-decoration: underline;      
+}
+QPushButton:hover {
+    color: #00D1A0;
+}</string>
+          </property>
+          <property name="text">
+           <string>Авторизація адміна</string>
+          </property>
+         </widget>
+        </item>
        </layout>
       </widget>
       <widget class="QWidget" name="page_5">
        <layout class="QGridLayout" name="gridLayout_5">
         <item row="1" column="1">
          <spacer name="horizontalSpacer_11">
+          <property name="orientation">
+           <enum>Qt::Orientation::Horizontal</enum>
+          </property>
+          <property name="sizeHint" stdset="0">
+           <size>
+            <width>40</width>
+            <height>20</height>
+           </size>
+          </property>
+         </spacer>
+        </item>
+        <item row="1" column="4">
+         <spacer name="horizontalSpacer_2">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
@@ -277,15 +345,15 @@ QPushButton:hover {
           </property>
          </spacer>
         </item>
-        <item row="1" column="0">
-         <spacer name="horizontalSpacer">
+        <item row="0" column="2">
+         <spacer name="verticalSpacer">
           <property name="orientation">
-           <enum>Qt::Orientation::Horizontal</enum>
+           <enum>Qt::Orientation::Vertical</enum>
           </property>
           <property name="sizeHint" stdset="0">
            <size>
-            <width>40</width>
-            <height>20</height>
+            <width>20</width>
+            <height>40</height>
            </size>
           </property>
          </spacer>
@@ -363,6 +431,13 @@ QPushButton:hover {
                    <item>
                     <widget class="QLineEdit" name="lineEdit_8"/>
                    </item>
+                   <item alignment="Qt::AlignmentFlag::AlignHCenter|Qt::AlignmentFlag::AlignVCenter">
+                    <widget class="QCheckBox" name="checkBox_2">
+                     <property name="text">
+                      <string/>
+                     </property>
+                    </widget>
+                   </item>
                   </layout>
                  </item>
                 </layout>
@@ -390,6 +465,13 @@ QPushButton:hover {
                 </widget>
                </item>
                <item>
+                <widget class="QPushButton" name="pushButton_4">
+                 <property name="text">
+                  <string>Назад</string>
+                 </property>
+                </widget>
+               </item>
+               <item>
                 <layout class="QHBoxLayout" name="horizontalLayout_13"/>
                </item>
               </layout>
@@ -399,8 +481,8 @@ QPushButton:hover {
           </item>
          </layout>
         </item>
-        <item row="1" column="4">
-         <spacer name="horizontalSpacer_2">
+        <item row="1" column="0">
+         <spacer name="horizontalSpacer">
           <property name="orientation">
            <enum>Qt::Orientation::Horizontal</enum>
           </property>
@@ -412,21 +494,8 @@ QPushButton:hover {
           </property>
          </spacer>
         </item>
-        <item row="0" column="2">
-         <spacer name="verticalSpacer">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
-        </item>
         <item row="2" column="2">
-         <spacer name="verticalSpacer_2">
+         <spacer name="verticalSpacer_36">
           <property name="orientation">
            <enum>Qt::Orientation::Vertical</enum>
           </property>
@@ -663,32 +732,28 @@ QPushButton:hover {
             <item>
              <widget class="QTableWidget" name="tableWidget">
               <property name="sizePolicy">
-               <sizepolicy hsizetype="Preferred" vsizetype="Preferred">
+               <sizepolicy hsizetype="MinimumExpanding" vsizetype="MinimumExpanding">
                 <horstretch>0</horstretch>
                 <verstretch>0</verstretch>
                </sizepolicy>
               </property>
+              <property name="minimumSize">
+               <size>
+                <width>0</width>
+                <height>250</height>
+               </size>
+              </property>
               <property name="styleSheet">
                <string notr="true">background-color: #2C2C2C;</string>
+              </property>
+              <property name="verticalScrollBarPolicy">
+               <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
               </property>
              </widget>
             </item>
            </layout>
           </item>
          </layout>
-        </item>
-        <item>
-         <spacer name="verticalSpacer_35">
-          <property name="orientation">
-           <enum>Qt::Orientation::Vertical</enum>
-          </property>
-          <property name="sizeHint" stdset="0">
-           <size>
-            <width>20</width>
-            <height>40</height>
-           </size>
-          </property>
-         </spacer>
         </item>
        </layout>
       </widget>
@@ -770,8 +835,8 @@ QPushButton:hover {
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -822,8 +887,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>3456456</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -873,8 +938,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -924,8 +989,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1005,8 +1070,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1056,8 +1121,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>11111111</width>
-                     <height>111111</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1107,8 +1172,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>11111111</width>
-                     <height>111111</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1158,8 +1223,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>11111111</width>
-                     <height>111111</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1239,8 +1304,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1290,8 +1355,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1341,8 +1406,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1392,8 +1457,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1473,8 +1538,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1524,8 +1589,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1575,8 +1640,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1626,8 +1691,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1707,8 +1772,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="layoutDirection">
@@ -1761,8 +1826,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1812,8 +1877,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -1863,8 +1928,8 @@ border-radius: 8px;</string>
                    </property>
                    <property name="maximumSize">
                     <size>
-                     <width>16777215</width>
-                     <height>16777215</height>
+                     <width>60</width>
+                     <height>60</height>
                     </size>
                    </property>
                    <property name="styleSheet">
@@ -2106,13 +2171,6 @@ border-radius: 8px;</string>
                </item>
               </layout>
              </item>
-             <item>
-              <widget class="QPushButton" name="pushButton_32">
-               <property name="text">
-                <string>Розбронювати всі місця</string>
-               </property>
-              </widget>
-             </item>
             </layout>
            </widget>
           </item>
@@ -2131,7 +2189,7 @@ border-radius: 8px;</string>
           </item>
          </layout>
         </item>
-        <item row="2" column="0">
+        <item row="1" column="0">
          <widget class="QPushButton" name="pushButton_2">
           <property name="sizePolicy">
            <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
@@ -2142,24 +2200,11 @@ border-radius: 8px;</string>
           <property name="minimumSize">
            <size>
             <width>40</width>
-            <height>40</height>
+            <height>0</height>
            </size>
           </property>
           <property name="styleSheet">
-           <string notr="true">QPushButton {
-    background-color: #4A4A4A; /* Нейтральний сірий фон */
-    color: #FFFFFF;           /* Білий текст */
-    border: none;
-    border-radius: 16px;      /* Скруглення (підберіть під висоту кнопки) */
-    padding: 8px 16px;
-    font-weight: bold;
-    min-height: 24px;
-}
-
-/* Ефект при наведенні */
-QPushButton:hover {
-    background-color: #5A5A5A; /* Трохи світліший сірий */
-}</string>
+           <string notr="true"/>
           </property>
           <property name="text">
            <string>Назад</string>
@@ -2169,39 +2214,514 @@ QPushButton:hover {
        </layout>
       </widget>
       <widget class="QWidget" name="page_6">
-       <widget class="QTableWidget" name="usersTableWidget">
-        <property name="geometry">
-         <rect>
-          <x>10</x>
-          <y>80</y>
-          <width>381</width>
-          <height>321</height>
-         </rect>
-        </property>
-       </widget>
-       <widget class="QLabel" name="label_14">
-        <property name="geometry">
-         <rect>
-          <x>300</x>
-          <y>20</y>
-          <width>401</width>
-          <height>42</height>
-         </rect>
-        </property>
-        <property name="font">
-         <font>
-          <family>Lucida Sans Unicode</family>
-          <pointsize>20</pointsize>
-          <bold>true</bold>
-         </font>
-        </property>
-        <property name="text">
-         <string>Адмін панель</string>
-        </property>
-        <property name="alignment">
-         <set>Qt::AlignmentFlag::AlignCenter</set>
-        </property>
-       </widget>
+       <layout class="QGridLayout" name="gridLayout_10">
+        <item row="0" column="0">
+         <layout class="QVBoxLayout" name="verticalLayout_29">
+          <item>
+           <layout class="QVBoxLayout" name="verticalLayout_27">
+            <item>
+             <widget class="QLabel" name="headerTitle">
+              <property name="font">
+               <font>
+                <family>Lucida Sans Unicode</family>
+                <pointsize>20</pointsize>
+                <bold>true</bold>
+               </font>
+              </property>
+              <property name="text">
+               <string>Адмін панель</string>
+              </property>
+              <property name="alignment">
+               <set>Qt::AlignmentFlag::AlignCenter</set>
+              </property>
+             </widget>
+            </item>
+            <item>
+             <layout class="QHBoxLayout" name="horizontalLayout_14">
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_26">
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_13">
+                  <item>
+                   <widget class="QLabel" name="sectionTitle23">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Список користувачів</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="usersTableWidget">
+                    <property name="minimumSize">
+                     <size>
+                      <width>480</width>
+                      <height>0</height>
+                     </size>
+                    </property>
+                    <property name="autoFillBackground">
+                     <bool>false</bool>
+                    </property>
+                    <property name="styleSheet">
+                     <string notr="true">QTableWidget {
+    background-color: #3c3c3c;
+    alternate-background-color: #333333; /* Чергування кольорів для рядків */
+    gridline-color: #4a4a4a;
+    border: 1px solid #555555;
+    selection-background-color: #007bff; /* Виділення рядка */
+    color: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Заголовки таблиць */
+QHeaderView::section {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 6px;
+    border: 1px solid #555555;
+    font-weight: bold;
+}
+
+/* Вимикаємо стандартний вигляд кутового віджета */
+QTableCornerButton::section {
+    background-color: #4a4a4a;
+}</string>
+                    </property>
+                    <property name="frameShape">
+                     <enum>QFrame::Shape::Box</enum>
+                    </property>
+                    <property name="frameShadow">
+                     <enum>QFrame::Shadow::Sunken</enum>
+                    </property>
+                    <property name="verticalScrollBarPolicy">
+                     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                    </property>
+                    <property name="horizontalScrollBarPolicy">
+                     <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+                <item>
+                 <layout class="QVBoxLayout" name="verticalLayout_24">
+                  <item>
+                   <widget class="QLabel" name="sectionTitle_3">
+                    <property name="font">
+                     <font>
+                      <pointsize>12</pointsize>
+                      <bold>true</bold>
+                     </font>
+                    </property>
+                    <property name="text">
+                     <string>Список адмінів</string>
+                    </property>
+                    <property name="alignment">
+                     <set>Qt::AlignmentFlag::AlignCenter</set>
+                    </property>
+                   </widget>
+                  </item>
+                  <item>
+                   <widget class="QTableWidget" name="adminsTableWidget">
+                    <property name="styleSheet">
+                     <string notr="true">QTableWidget {
+    background-color: #3c3c3c;
+    alternate-background-color: #333333; /* Чергування кольорів для рядків */
+    gridline-color: #4a4a4a;
+    border: 1px solid #555555;
+    selection-background-color: #007bff; /* Виділення рядка */
+    color: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Заголовки таблиць */
+QHeaderView::section {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 6px;
+    border: 1px solid #555555;
+    font-weight: bold;
+}
+
+/* Вимикаємо стандартний вигляд кутового віджета */
+QTableCornerButton::section {
+    background-color: #4a4a4a;
+}</string>
+                    </property>
+                   </widget>
+                  </item>
+                 </layout>
+                </item>
+               </layout>
+              </item>
+              <item>
+               <layout class="QVBoxLayout" name="verticalLayout_8">
+                <item>
+                 <widget class="QLabel" name="sectionTitle_2">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Список фільмів</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableWidget" name="adminMoviesTable">
+                  <property name="styleSheet">
+                   <string notr="true">QTableWidget {
+    background-color: #3c3c3c;
+    alternate-background-color: #333333; /* Чергування кольорів для рядків */
+    gridline-color: #4a4a4a;
+    border: 1px solid #555555;
+    selection-background-color: #007bff; /* Виділення рядка */
+    color: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Заголовки таблиць */
+QHeaderView::section {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 6px;
+    border: 1px solid #555555;
+    font-weight: bold;
+}
+
+/* Вимикаємо стандартний вигляд кутового віджета */
+QTableCornerButton::section {
+    background-color: #4a4a4a;
+}</string>
+                  </property>
+                  <property name="verticalScrollBarPolicy">
+                   <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                  </property>
+                  <property name="horizontalScrollBarPolicy">
+                   <enum>Qt::ScrollBarPolicy::ScrollBarAlwaysOff</enum>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QLabel" name="sectionTitle_4">
+                  <property name="font">
+                   <font>
+                    <pointsize>12</pointsize>
+                    <bold>true</bold>
+                   </font>
+                  </property>
+                  <property name="text">
+                   <string>Список сеансів</string>
+                  </property>
+                  <property name="alignment">
+                   <set>Qt::AlignmentFlag::AlignCenter</set>
+                  </property>
+                 </widget>
+                </item>
+                <item>
+                 <widget class="QTableWidget" name="tableWidget_2">
+                  <property name="styleSheet">
+                   <string notr="true">QTableWidget {
+    background-color: #3c3c3c;
+    alternate-background-color: #333333; /* Чергування кольорів для рядків */
+    gridline-color: #4a4a4a;
+    border: 1px solid #555555;
+    selection-background-color: #007bff; /* Виділення рядка */
+    color: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Заголовки таблиць */
+QHeaderView::section {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 6px;
+    border: 1px solid #555555;
+    font-weight: bold;
+}
+
+/* Вимикаємо стандартний вигляд кутового віджета */
+QTableCornerButton::section {
+    background-color: #4a4a4a;
+}</string>
+                  </property>
+                 </widget>
+                </item>
+               </layout>
+              </item>
+             </layout>
+            </item>
+           </layout>
+          </item>
+          <item>
+           <layout class="QHBoxLayout" name="horizontalLayout_24">
+            <item>
+             <widget class="QFrame" name="frame_6">
+              <property name="styleSheet">
+               <string notr="true">background-color: #2C2C2C;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_7">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_28">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_21">
+                   <item>
+                    <widget class="QLabel" name="label_25">
+                     <property name="text">
+                      <string>Логін</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="adminLoginRegisterEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_22">
+                   <item>
+                    <widget class="QLabel" name="label_26">
+                     <property name="text">
+                      <string>Пароль</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="adminPasswordRegisterEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_23">
+                   <item>
+                    <widget class="QLabel" name="label_24">
+                     <property name="text">
+                      <string>IP-адреса</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="adminIpRegisterEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="registerAdminButton">
+                   <property name="text">
+                    <string>Зареєструвати адміна</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_23">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_7">
+              <property name="styleSheet">
+               <string notr="true">background-color: #2C2C2C;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_8">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_9">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_18">
+                   <item>
+                    <widget class="QLabel" name="label_18">
+                     <property name="text">
+                      <string>Назва</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="movieTitleEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_19">
+                   <item>
+                    <widget class="QLabel" name="label_19">
+                     <property name="text">
+                      <string>Час</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="movieDurationEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_20">
+                   <item>
+                    <widget class="QLabel" name="label_20">
+                     <property name="text">
+                      <string>Жанр</string>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QLineEdit" name="movieGenreEdit"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="addMovieButton">
+                   <property name="text">
+                    <string>Додати Фільм</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+            <item>
+             <spacer name="horizontalSpacer_24">
+              <property name="orientation">
+               <enum>Qt::Orientation::Horizontal</enum>
+              </property>
+              <property name="sizeHint" stdset="0">
+               <size>
+                <width>40</width>
+                <height>20</height>
+               </size>
+              </property>
+             </spacer>
+            </item>
+            <item>
+             <widget class="QFrame" name="frame_8">
+              <property name="styleSheet">
+               <string notr="true">background-color: #2C2C2C;</string>
+              </property>
+              <property name="frameShape">
+               <enum>QFrame::Shape::StyledPanel</enum>
+              </property>
+              <property name="frameShadow">
+               <enum>QFrame::Shadow::Raised</enum>
+              </property>
+              <layout class="QGridLayout" name="gridLayout_9">
+               <item row="0" column="0">
+                <layout class="QVBoxLayout" name="verticalLayout_10">
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_15">
+                   <item>
+                    <widget class="QLabel" name="label_15">
+                     <property name="text">
+                      <string>Фільм</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignmentFlag::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="sessionMovieComboBox"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_16">
+                   <item>
+                    <widget class="QLabel" name="label_16">
+                     <property name="text">
+                      <string>Зал</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignmentFlag::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QComboBox" name="sessionHallComboBox"/>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <layout class="QHBoxLayout" name="horizontalLayout_17">
+                   <item>
+                    <widget class="QLabel" name="label_17">
+                     <property name="text">
+                      <string>Дата і час</string>
+                     </property>
+                     <property name="alignment">
+                      <set>Qt::AlignmentFlag::AlignCenter</set>
+                     </property>
+                    </widget>
+                   </item>
+                   <item>
+                    <widget class="QDateTimeEdit" name="sessionDateTimeEdit">
+                     <property name="calendarPopup">
+                      <bool>true</bool>
+                     </property>
+                    </widget>
+                   </item>
+                  </layout>
+                 </item>
+                 <item>
+                  <widget class="QPushButton" name="addSessionButton">
+                   <property name="text">
+                    <string>Додати сеанс</string>
+                   </property>
+                  </widget>
+                 </item>
+                </layout>
+               </item>
+              </layout>
+             </widget>
+            </item>
+           </layout>
+          </item>
+         </layout>
+        </item>
+        <item row="1" column="0">
+         <widget class="QPushButton" name="pushButton_3">
+          <property name="text">
+           <string>Розбронювати всі місця</string>
+          </property>
+         </widget>
+        </item>
+       </layout>
       </widget>
      </widget>
     </item>
@@ -2212,7 +2732,7 @@ QPushButton:hover {
     <rect>
      <x>0</x>
      <y>0</y>
-     <width>971</width>
+     <width>862</width>
      <height>22</height>
     </rect>
    </property>

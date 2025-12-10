@@ -1,0 +1,181 @@
+QMainWindow, QWidget {
+    background-color: #2b2b2b; /* Темний сірий фон */
+    color: #f0f0f0; /* Світлий текст */
+    font-family: "Segoe UI", "Helvetica", sans-serif;
+    font-size: 10pt;
+}
+
+/* Стиль для головних заголовків */
+QLabel#mainTitle { 
+    font-size: 16pt;
+    font-weight: bold;
+    color: #ffffff; /* Чисто білий для заголовків */
+}
+/* --- КНОПКИ (Основний Стиль) --- */
+QPushButton {
+    background-color: #4a4a4a; /* Середньо-сірий для кнопок */
+    border: 1px solid #666666;
+    color: #f0f0f0;
+    padding: 8px 15px;
+    border-radius: 4px;
+    outline: none;
+}
+QPushButton:hover {
+    background-color: #5d5d5d; /* Трохи світліше при наведенні */
+    border-color: #888888;
+}
+QPushButton:pressed {
+    background-color: #3b3b3b; /* Темніше при натисканні */
+}
+QPushButton:disabled {
+    background-color: #383838;
+    color: #888888;
+    border-color: #444444;
+}
+
+/* --- КНОПКИ ДЛЯ ВИДАЛЕННЯ (Червоний акцент) --- */
+QPushButton[text="Видалити"] {
+    background-color: #c9302c; /* Червоний */
+    border: 1px solid #a82420;
+    color: white;
+}
+QPushButton[text="Видалити"]:hover {
+    background-color: #e04440;
+}
+QPushButton[text="Видалити"]:pressed {
+    background-color: #9c2724;
+}
+
+/* --- КНОПКИ ЗЕЛЕНОГО АКЦЕНТУ (Вхід, Реєстрація, Додати) --- */
+/* Застосуйте об'єктне ім'я до кнопок, наприклад, loginButton, registerButton */
+QPushButton#pushButton_29, QPushButton#registerAdminButton, QPushButton#addMovieButton, QPushButton#addSessionButton, QPushButton#pushButton_34, QPushButton#pushButton_31, QPushButton#pushButton_8 {
+    background-color: #4CAF50; /* Зелений */
+    border: 1px solid #43A047;
+    color: white;
+    font-weight: bold;
+}
+QPushButton#pushButton_29:hover, QPushButton#registerAdminButton:hover, QPushButton#addMovieButton:hover, QPushButton#addSessionButton:hover, QPushButton#pushButton_34:hover, QPushButton#pushButton_31:hover, QPushButton#pushButton_8:hover {
+    background-color: #66BB6A;
+}
+
+
+/* --- ПОЛЯ ВВОДУ ТА ВИПАДАЮЧІ СПИСКИ (QLineEdit, QComboBox, QDateTimeEdit) --- */
+QLineEdit, QComboBox, QDateTimeEdit {
+    background-color: #3c3c3c; /* Темніший сірий фон поля */
+    border: 1px solid #555555;
+    color: #f0f0f0;
+    padding: 5px;
+    border-radius: 3px;
+    selection-background-color: #007bff; /* Акцентний колір при виділенні */
+}
+
+/* Фокус на елементі */
+QLineEdit:focus, QComboBox:focus, QDateTimeEdit:focus {
+    border-color: #007bff; /* Світло-синій акцент */
+}
+
+/* Стиль для стрілки QComboBox */
+QComboBox::drop-down {
+    subcontrol-origin: padding;
+    subcontrol-position: top right;
+    width: 20px;
+    border-left-width: 1px;
+    border-left-color: #555555;
+    border-left-style: solid; 
+    border-top-right-radius: 3px;
+    border-bottom-right-radius: 3px;
+}
+QComboBox::down-arrow {
+    image: url(icons/arrow_down.png); /* Замініть на шлях до вашої іконки */
+}
+QTableWidget {
+    background-color: #3c3c3c;
+    alternate-background-color: #333333; /* Чергування кольорів для рядків */
+    gridline-color: #4a4a4a;
+    border: 1px solid #555555;
+    selection-background-color: #007bff; /* Виділення рядка */
+    color: #f0f0f0;
+    border-radius: 4px;
+}
+
+/* Заголовки таблиць */
+QHeaderView::section {
+    background-color: #4a4a4a;
+    color: #ffffff;
+    padding: 6px;
+    border: 1px solid #555555;
+    font-weight: bold;
+}
+
+/* Вимикаємо стандартний вигляд кутового віджета */
+QTableCornerButton::section {
+    background-color: #4a4a4a;
+}
+/* --- Заголовки розділів (Адмін-панель) --- */
+/* Припустімо, що "Список користувачів", "Список фільмів" тощо — це QLabel */
+QLabel {
+    color: #cccccc; /* Світло-сірий для звичайного тексту */
+}
+QLabel#headerTitle { /* Заголовок "Адмін панель" */
+    font-size: 18pt;
+    font-weight: bold;
+    color: #ffffff;
+    margin-bottom: 10px;
+}
+QLabel#sectionTitle { /* Заголовки над таблицями */
+    font-size: 12pt;
+    font-weight: 600; /* Напівжирний */
+    color: #f0f0f0;
+    margin-top: 15px;
+    margin-bottom: 5px;
+}
+
+
+
+
+
+/* --- Віджет Фільму/Постера (Ключ до гарного вигляду) --- */
+/* Цей стиль має бути застосований до QWidget, який містить постер та назву */
+/* Це умовний стиль. Якщо це не QWidget, а QLabel, стилізуйте його. */
+QWidget.MovieWidget {
+    border: 2px solid transparent; /* Прозора рамка */
+    padding: 5px;
+    border-radius: 6px;
+}
+QWidget.MovieWidget:hover {
+    border: 2px solid #007bff; /* Світло-синя рамка при наведенні */
+    background-color: #3b3b3b; /* Трохи підсвічуємо фон */
+}
+
+/* --- Кнопка "Вийти з профілю" (Верхній правий кут) --- */
+/* Припускаємо, що це ui->logoutButton */
+QPushButton#logoutButton {
+    background: none; /* Без фону */
+    border: none;
+    color: #007bff; /* Акцентний синій */
+    padding: 5px;
+    text-decoration: underline;
+    font-size: 10pt;
+}
+QPushButton#logoutButton:hover {
+    color: #66BB6A; /* Зелений при наведенні */
+}
+QFrame#frame_2 {
+    background-color: #333333; /* Фон панелі */
+    border-left: 1px solid #4a4a4a;
+    padding: 15px;
+}
+
+/* Кнопка "Оплатити" */
+QPushButton#pushButton_8 {
+    background-color: #00bcd4; /* Акцентний бірюзовий */
+    border: 1px solid #0097a7;
+    color: white;
+    font-size: 12pt;
+    font-weight: bold;
+    padding: 10px;
+    border-radius: 5px;
+}
+QPushButton#pushButton_8:hover {
+    background-color: #30cfdd;
+}

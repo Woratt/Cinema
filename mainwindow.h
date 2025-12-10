@@ -8,7 +8,6 @@
 #include <QTimer>
 
 #include "apimanager.h"
-//#include "user.h"
 #include "loadposter.h"
 #include "moviewidget.h"
 #include "windowsessions.h"
@@ -78,15 +77,41 @@ private slots:
     void onUnReservePlaces();
     void goToAdmin();
     void loadUserList();
+    void loadAdminList();
     void markReservePlaces();
     void adminPage();
     void showPassword();
+    void backPage();
+    void showPasswordAdmin();
     //void markUnReservePlaces();
 
     void errorLogIn(const QString&);
     void errorRegIn(const QString&);
 
     void deleteUserClicked(int userID);
+    void deleteAdminClicked(int adminId);
+
+    void on_addMovieButton_clicked();
+    void handleMovieAddSuccess(const QString& message);
+    void handleMovieAddError(const QString& error);
+
+    void on_addSessionButton_clicked();
+    void handleSessionAddSuccess(const QString& message);
+    void handleSessionAddError(const QString& error);
+    void loadSessionCreationData();
+
+    void deleteMovieButtonClicked();
+    void handleMovieDeleteSuccess(const QString& message);
+    void handleMovieDeleteError(const QString& error);
+    void loadAdminMovieList();
+
+    void on_registerAdminButton_clicked();
+    void handleAdminRegistrationSuccess(const QString& message);
+    void handleAdminRegistrationError(const QString& error);
+
+   // void deleteSessionButtonClicked();
+   // void handleSessionDeleteSuccess(const QString& message);
+   // void handleSessionDeleteError(const QString& error);
 
 };
 

@@ -36,6 +36,7 @@ find_package(Qt6 REQUIRED COMPONENTS Core Widgets)
         loadposter.h loadposter.cpp
         windowsessions.h windowsessions.cpp
         sessionwidget.h sessionwidget.cpp
+        app_resources.qrc
 
     )
 # Define target properties for Android with Qt 6 as:
