@@ -79,6 +79,7 @@ private slots:
     void loadUserList();
     void loadAdminList();
     void markReservePlaces();
+    void markUnReservePlaces();
     void adminPage();
     void showPassword();
     void backPage();

@@ -245,6 +245,7 @@ void MainWindow::onCalculateRemainder(){
 void MainWindow::selectSession(int numOfSession){
     m_session = numOfSession;
     markReservePlaces();
+    //markReserveUnPlaces();
 }
 
 void MainWindow::selectPlaces(int numOfPlace){
@@ -304,6 +305,20 @@ void MainWindow::onReservePlaces(){
     m_numOfPlaces.clear();
 }
 
+void MainWindow::onUnReservePlaces(){
+    qDebug();
+    for (int i = 0; i < m_placesButtons.size(); ++i) {
+        QPushButton *button = m_placesButtons[i];
+        if (!button->isEnabled()) {
+            int numOfPlace = i + 1;
+            qDebug() << m_session << numOfPlace;
+            m_apiManager->unreservePlace(m_session, numOfPlace);
+            button->setChecked(true);
+            m_placesButtons[i]->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
+        }
+    }
+}
+
 
 void MainWindow::markReservePlaces(){
     QVector<int> reservePlaces = m_apiManager->getReservePlaces(m_session);
@@ -318,16 +333,17 @@ void MainWindow::markReservePlaces(){
         }
     }
 }
-void MainWindow::onUnReservePlaces(){
-    qDebug();
-    for (int i = 0; i < m_placesButtons.size(); ++i) {
-        QPushButton *button = m_placesButtons[i];
-        if (!button->isEnabled()) {
-            int numOfPlace = i + 1;
-            qDebug() << m_session << numOfPlace;
-            m_apiManager->unreservePlace(m_session, numOfPlace);
-            button->setChecked(true);
-            m_placesButtons[i]->setStyleSheet("background-color: green; color: white;font-weight: bold;border: none;border-radius: 8px;");
+
+void MainWindow::markUnReservePlaces(){
+    QVector<int> reservePlaces = m_apiManager->getReservePlaces(m_session);
+    qDebug() << reservePlaces.size() << "\n";
+    for(int i  = 0; i < reservePlaces.size(); ++i){
+        qDebug() << reservePlaces[i] << "\n";
+        if(reservePlaces[i] == 0){
+            m_placesButtons[i]->setEnabled(false);
+            m_placesButtons[i]->setStyleSheet("background-color: grey; color: black;font-weight: bold;border: none;border-radius: 8px;");
+        }else{
+            m_placesButtons[i]->setEnabled(true);
         }
     }
 }
