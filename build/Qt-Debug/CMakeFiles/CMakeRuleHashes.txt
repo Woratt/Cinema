@@ -1,0 +1,4 @@
+# Hashes of file build rules.
+3608b70a8f639285e599157a2cef4150 CMakeFiles/cinema_autogen
+89ca1925e96ed83088c10f9acf7c2a74 cinema_autogen/EWIEGA46WW/qrc_app_resources.cpp
+27289550235f4fd4b44311a5582f009d cinema_autogen/timestamp

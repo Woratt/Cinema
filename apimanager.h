@@ -19,6 +19,7 @@ struct Session {
     int duration;
     QString time;
     QString hallName;
+    QString movie_title;
     QString date;
 };
 

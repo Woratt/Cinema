@@ -6,6 +6,7 @@ ApiManager::ApiManager(QWidget* parent): QWidget(parent)
     connect(manager, &QNetworkAccessManager::finished, this, &ApiManager::onReplyFinished);
 }
 void ApiManager::registerAdmin(const QString& login, const QString& password, const QString& admin_ip){
+    qDebug() << "registerAdmin";
     QJsonObject json;
     json["login"] = login;
     json["password"] = password;
@@ -359,6 +360,7 @@ QVector<Session> ApiManager::getAllSessions(){
         QJsonObject sessionObj = sessionsArray[i].toObject();
         Session session;
         session.id = sessionObj["id"].toInt();
+        session.movie_title = sessionObj["movie_title"].toString();
         session.hallName = sessionObj["hall_name"].toString();
         QString dateTime = sessionObj["session_datetime"].toString();
 
