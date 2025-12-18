@@ -95,6 +95,12 @@ signals:
     void sessionAddError(const QString& error);
     void movieDeleteSuccess(const QString& message);
     void movieDeleteError(const QString& error);
+    void userDeleteSucess(const QString &message);
+    void userDeleteError(const QString &error);
+    void adminDeleteSucess(const QString &message);
+    void adminDeleteError(const QString &error);
+    void sessionDeleteSucess(const QString &message);
+    void sessionDeleteError(const QString &error);
     void adminRegistrationSuccess(const QString& message);
     void adminRegistrationError(const QString& error);
 private slots:

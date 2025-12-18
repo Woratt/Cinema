@@ -48,7 +48,7 @@ QPushButton[text="Видалити"]:pressed {
 
 /* --- КНОПКИ ЗЕЛЕНОГО АКЦЕНТУ (Вхід, Реєстрація, Додати) --- */
 /* Застосуйте об'єктне ім'я до кнопок, наприклад, loginButton, registerButton */
-QPushButton#pushButton_29, QPushButton#registerAdminButton, QPushButton#addMovieButton, QPushButton#addSessionButton, QPushButton#pushButton_34, QPushButton#pushButton_31, QPushButton#pushButton_8 {
+QPushButton#pushButton_29, QPushButton#registerAdminButton, QPushButton#addMovieButton, QPushButton#addSessionButton, QPushButton#pushButton_34, QPushButton#pushButton_31, QPushButton#pushButton_8,QPushButton#addHallButton {
     background-color: #4CAF50; /* Зелений */
     border: 1px solid #43A047;
     color: white;

@@ -408,7 +408,7 @@ QVector<Hall> ApiManager::getAllHalls(){
 
     QJsonDocument doc = QJsonDocument::fromJson(m_data);
     QJsonArray hallsArray = doc.array();
-    for(int i = 0; i < halls.size(); ++i){
+    for(int i = 0; i < hallsArray.size(); ++i){
         QJsonObject hallObj = hallsArray[i].toObject();
         Hall hall;
         hall.id = hallObj["id"].toInt();
@@ -575,6 +575,15 @@ void ApiManager::onReplyFinished(QNetworkReply* reply)
             }
             else if(url.contains("/registerAdmin")){
                 emit adminRegistrationSuccess(message);
+            }
+            else if(url.contains("/deleteUser")){
+                emit userDeleteSucess(message);
+            }
+            else if(url.contains("/deleteAdmin")){
+                emit adminDeleteSucess(message);
+            }
+            else if(url.contains("/deleteSession")){
+                emit sessionDeleteSucess(message);
             }
             else if(url.contains("/deleteMovie")){
                 emit movieDeleteSuccess(message);

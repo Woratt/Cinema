@@ -32,6 +32,7 @@ private:
     int m_rez = 0;
     int m_session = 0;
     int m_movies;
+    int m_selectedAdminSessionId = -1;
     QVector<int> m_numOfPlaces;
     QVector<QPushButton*> m_placesButtons;
     QVector<QPushButton*> m_sessionButtons;
@@ -110,9 +111,12 @@ private slots:
     void handleAdminRegistrationSuccess(const QString& message);
     void handleAdminRegistrationError(const QString& error);
 
-   // void deleteSessionButtonClicked();
+    void loadAdminSessionList();
+    void deleteSessionButtonClicked();
    // void handleSessionDeleteSuccess(const QString& message);
    // void handleSessionDeleteError(const QString& error);
+    void handleUnreserveSession(int sessionId);
+    void on_addHallButton_clicked();
 
 };
 
